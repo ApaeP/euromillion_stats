@@ -1,0 +1,165 @@
+<ul class="nav nav-tabs justify-content-center" id="year-tabs" role="tablist">
+  <% (2004..2020).to_a.reverse.each_with_index do |year, i| %>
+    <% if i == 0 %>
+      <li class="nav-item" data-year="<%= year %>">
+        <a class="nav-link active" id="<%= year %>-tab" data-toggle="tab" href="#<%= year %>" role="tab" aria-controls="<%= year %>" aria-selected="true"><%= year %></a>
+      </li>
+    <% else %>
+      <li class="nav-item" data-year="<%= year %>">
+        <a class="nav-link" id="<%= year %>-tab" data-toggle="tab" href="#<%= year %>" role="tab" aria-controls="<%= year %>" aria-selected="false"><%= year %></a>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+
+
+
+
+<div class="tab-content">
+  <% (2004..2020).to_a.reverse.each_with_index do |year, i| %>
+
+    <% if i == 0 %>
+
+      <div class="tab-pane active" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
+        <h2 class="year-title"><%= year %> (<%= instance_variable_get("@tirages_#{year}").length %> tirages)</h2>
+        <% instance_variable_get("@tirages_#{year}").reverse.each do |resultat| %>
+
+          <div class="displayed-result">
+            <div class="displayed-date">
+              <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
+              <div class="displayed-date-month"><%= resultat[0].strftime("%B") %></div>
+              <div class="displayed-date-day"><%= resultat[0].strftime("(%A)") %></div>
+            </div>
+            <div class="displayed-number"><%= resultat[1] %></div>
+            <div class="displayed-number"><%= resultat[2] %></div>
+            <div class="displayed-number"><%= resultat[3] %></div>
+            <div class="displayed-number"><%= resultat[4] %></div>
+            <div class="displayed-number"><%= resultat[5] %></div>
+            <div class="displayed-star"><i class="fas fa-star"></i><%= resultat[6] %></div>
+            <div class="displayed-star"><i class="fas fa-star"></i><%= resultat[7] %></div>
+            <div class="displayed-prize"><%= resultat[8] == "0 EUR" ? "Non communiqué" : resultat[8] %></div>
+          </div>
+
+        <% end %> <!-- itération sur variable d'instance get -->
+
+        <% num_frequencies = Hash.new %>
+        <% star_frequencies = Hash.new %>
+        <% i = 0 %>
+        <% j = 0 %>
+        <% 50.times do %>
+          <% num_frequencies[i + 1] = 0 %>
+          <% i += 1 %>
+        <% end %>
+        <% 12.times do %>
+          <% star_frequencies[j + 1] = 0 %>
+          <% j += 1 %>
+        <% end %>
+        <% instance_variable_get("@tirages_#{year}").sort.each do |_, chiffre1, chiffre2, chiffre3, chiffre4, chiffre5, star1, star2, _| %>
+          <% num_frequencies[chiffre1] ? num_frequencies[chiffre1] += 1 : num_frequencies[chiffre1] = 1 %>
+          <% num_frequencies[chiffre2] ? num_frequencies[chiffre2] += 1 : num_frequencies[chiffre2] = 1 %>
+          <% num_frequencies[chiffre3] ? num_frequencies[chiffre3] += 1 : num_frequencies[chiffre3] = 1 %>
+          <% num_frequencies[chiffre4] ? num_frequencies[chiffre4] += 1 : num_frequencies[chiffre4] = 1 %>
+          <% num_frequencies[chiffre5] ? num_frequencies[chiffre5] += 1 : num_frequencies[chiffre5] = 1 %>
+          <% star_frequencies[star1] ? star_frequencies[star1] += 1 : star_frequencies[star1] = 1 %>
+          <% star_frequencies[star2] ? star_frequencies[star2] += 1 : star_frequencies[star2] = 1 %>
+        <% end %>
+        <% concatenated_num_freq = Hash.new %>
+        <% concatenated_star_freq = Hash.new %>
+        <% num_frequencies.each { |key, value| concatenated_num_freq[value] = [] } %>
+        <% num_frequencies.each { |key, value| concatenated_num_freq[value] << key } %>
+        <% star_frequencies.each { |key, value| concatenated_star_freq[value] = [] } %>
+        <% star_frequencies.each { |key, value| concatenated_star_freq[value] << key } %>
+
+        <% (concatenated_num_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
+          <% if (elem[1].length > 1) %>
+            <p>Les chiffres <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+          <% else %>
+            <p>Le chiffre <%= elem[1] %> est sorti <%= elem[0] %> fois sur cette période</p>
+          <% end %>
+        <% end %>
+
+        <% (concatenated_star_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
+          <% if (elem[1].length > 1) %>
+            <p>Les étoiles <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+          <% else %>
+            <p>L'étoile <%= elem[1] %> est sortie <%= elem[0] %> fois sur cette période</p>
+          <% end %>
+        <% end %>
+
+      </div>
+
+    <% else %>
+
+      <div class="tab-pane" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
+        <h2 class="year-title"><%= year %> (<%= instance_variable_get("@tirages_#{year}").length %> tirages)</h2>
+        <% instance_variable_get("@tirages_#{year}").reverse.each do |resultat| %>
+
+          <div class="displayed-result">
+            <div class="displayed-date">
+              <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
+              <div class="displayed-date-month"><%= resultat[0].strftime("%B") %></div>
+              <div class="displayed-date-day"><%= resultat[0].strftime("(%A)") %></div>
+            </div>
+            <div class="displayed-number"><%= resultat[1] %></div>
+            <div class="displayed-number"><%= resultat[2] %></div>
+            <div class="displayed-number"><%= resultat[3] %></div>
+            <div class="displayed-number"><%= resultat[4] %></div>
+            <div class="displayed-number"><%= resultat[5] %></div>
+            <div class="displayed-star"><i class="fas fa-star"></i><%= resultat[6] %></div>
+            <div class="displayed-star"><i class="fas fa-star"></i><%= resultat[7] %></div>
+            <div class="displayed-prize"><%= resultat[8] == "0 EUR" ? "Non communiqué" : resultat[8] %></div>
+          </div>
+
+        <% end %> <!-- itération sur variable d'instance get -->
+
+        <% num_frequencies = Hash.new %>
+        <% star_frequencies = Hash.new %>
+        <% i = 0 %>
+        <% j = 0 %>
+        <% 50.times do %>
+          <% num_frequencies[i + 1] = 0 %>
+          <% i += 1 %>
+        <% end %>
+        <% 12.times do %>
+          <% star_frequencies[j + 1] = 0 %>
+          <% j += 1 %>
+        <% end %>
+        <% instance_variable_get("@tirages_#{year}").sort.each do |_, chiffre1, chiffre2, chiffre3, chiffre4, chiffre5, star1, star2, _| %>
+          <% num_frequencies[chiffre1] ? num_frequencies[chiffre1] += 1 : num_frequencies[chiffre1] = 1 %>
+          <% num_frequencies[chiffre2] ? num_frequencies[chiffre2] += 1 : num_frequencies[chiffre2] = 1 %>
+          <% num_frequencies[chiffre3] ? num_frequencies[chiffre3] += 1 : num_frequencies[chiffre3] = 1 %>
+          <% num_frequencies[chiffre4] ? num_frequencies[chiffre4] += 1 : num_frequencies[chiffre4] = 1 %>
+          <% num_frequencies[chiffre5] ? num_frequencies[chiffre5] += 1 : num_frequencies[chiffre5] = 1 %>
+          <% star_frequencies[star1] ? star_frequencies[star1] += 1 : star_frequencies[star1] = 1 %>
+          <% star_frequencies[star2] ? star_frequencies[star2] += 1 : star_frequencies[star2] = 1 %>
+        <% end %>
+        <% concatenated_num_freq = Hash.new %>
+        <% concatenated_star_freq = Hash.new %>
+        <% num_frequencies.each { |key, value| concatenated_num_freq[value] = [] } %>
+        <% num_frequencies.each { |key, value| concatenated_num_freq[value] << key } %>
+        <% star_frequencies.each { |key, value| concatenated_star_freq[value] = [] } %>
+        <% star_frequencies.each { |key, value| concatenated_star_freq[value] << key } %>
+
+        <% (concatenated_num_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
+          <% if (elem[1].length > 1) %>
+            <p>Les chiffres <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+          <% else %>
+            <p>Le chiffre <%= elem[1] %> est sorti <%= elem[0] %> fois sur cette période</p>
+          <% end %>
+        <% end %>
+
+        <% (concatenated_star_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
+          <% if (elem[1].length > 1) %>
+            <p>Les étoiles <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+          <% else %>
+            <p>L'étoile <%= elem[1] %> est sortie <%= elem[0] %> fois sur cette période</p>
+          <% end %>
+        <% end %>
+
+      </div>
+
+    <% end %> <!-- ife -->
+
+  <% end %> <!-- iteration sur range d'années -->
+</div>

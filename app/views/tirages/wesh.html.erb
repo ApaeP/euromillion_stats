@@ -1,0 +1,78 @@
+<ul class="nav nav-tabs justify-content-center" id="year-tabs" role="tablist" >
+  <% (2004..2020).to_a.reverse.each_with_index do |year, i| %>
+    <% if i == 0 %>
+      <li class="nav-item">
+        <a class="nav-link active" id="<%= year %>-tab" data-toggle="tab" href="#<%= year %>" role="tab" aria-controls="<%= year %>" aria-selected="true"><%= year %></a>
+      </li>
+    <% else %>
+      <li class="nav-item">
+        <a class="nav-link" id="<%= year %>-tab" data-toggle="tab" href="#<%= year %>" role="tab" aria-controls="<%= year %>" aria-selected="false"><%= year %></a>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+
+
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <% (2004..2020).to_a.reverse.each_with_index do |year, i| %>
+    <% if i == 0 %>
+      <div class="tab-pane active" id="<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">1</div>
+    <% else %>
+      <div class="tab-pane" id="<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">2</div>
+    <% end %>
+  <% end %>
+</div>
+
+
+<div class="tab-content">
+  <% (2004..2020).to_a.reverse.each_with_index do |year, i| %>
+
+    <% if i == 0 %>
+
+      <div class="tab-pane active" id="<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
+        <h2><%= year %></h2>
+        <% start_date = Date.parse "#{year}/01/01" %>
+        <% end_date = Date.parse "#{year+1}/01/01" %>
+        <% filtered_results = @array_of_tiragearrays.select { |date, _, _, _, _, _, _, _, _| (start_date..end_date).cover?(date) } %>
+        <% filtered_results.reverse.each do |resultat| %>
+          <tr>
+            <td><%= resultat[0] %></td>
+            <td><%= resultat[1] %></td>
+            <td><%= resultat[2] %></td>
+            <td><%= resultat[3] %></td>
+            <td><%= resultat[4] %></td>
+            <td><%= resultat[5] %></td>
+            <td><%= resultat[6] %></td>
+          </tr>
+          <hr>
+        <% end %>
+      </div>
+
+    <% else %>
+
+      <div class="tab-pane" id="<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
+        <h2><%= year %></h2>
+        <% start_date = Date.parse "#{year}/01/01" %>
+        <% end_date = Date.parse "#{year+1}/01/01" %>
+        <% filtered_results = @array_of_tiragearrays.select { |date, _, _, _, _, _, _, _, _| (start_date..end_date).cover?(date) } %>
+        <% filtered_results.reverse.each do |resultat| %>
+          <tr>
+            <td><%= resultat[0] %></td>
+            <td><%= resultat[1] %></td>
+            <td><%= resultat[2] %></td>
+            <td><%= resultat[3] %></td>
+            <td><%= resultat[4] %></td>
+            <td><%= resultat[5] %></td>
+            <td><%= resultat[6] %></td>
+          </tr>
+          <hr>
+        <% end %>
+      </div>
+
+    <% end %>
+
+  <% end %>
+</div>
