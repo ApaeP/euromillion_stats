@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   resources :tirages
   get 'index_per_year', to: 'pages#index_per_year'
   get 'frequencies', to: 'pages#frequencies'
+  get 'populate', to: 'pages#populate'
 end

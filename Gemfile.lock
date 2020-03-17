@@ -158,6 +158,7 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
+    rubysl-open-uri (2.0.0)
     sassc (2.2.1)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -221,6 +222,7 @@ DEPENDENCIES
   puma
   rails (= 6.0.2.1)
   redis
+  rubysl-open-uri
   sassc-rails
   simple_form
   spring

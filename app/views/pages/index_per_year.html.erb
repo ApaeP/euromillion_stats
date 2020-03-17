@@ -23,9 +23,10 @@
 
       <div class="tab-pane active" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
         <h2 class="year-title"><%= year %> (<%= instance_variable_get("@tirages_#{year}").length %> tirages)</h2>
-        <% instance_variable_get("@tirages_#{year}").reverse.each do |resultat| %>
+        <% instance_variable_get("@tirages_#{year}").reverse.each_with_index do |resultat, index| %>
 
           <div class="displayed-result">
+            <div class="displayed-index"><%= index + 1 %>°)</div>
             <div class="displayed-date">
               <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
               <div class="displayed-date-month"><%= resultat[0].strftime("%B") %></div>
@@ -73,17 +74,17 @@
 
         <% (concatenated_num_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
           <% if (elem[1].length > 1) %>
-            <p>Les chiffres <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+            <p>Les chiffres <%= elem[1].sort.join(', ') %> sont sortis <%= elem[0] %> fois sur cette période</p>
           <% else %>
-            <p>Le chiffre <%= elem[1] %> est sorti <%= elem[0] %> fois sur cette période</p>
+            <p>Le chiffre <%= elem[1][0] %> est sorti <%= elem[0] %> fois sur cette période</p>
           <% end %>
         <% end %>
 
         <% (concatenated_star_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
           <% if (elem[1].length > 1) %>
-            <p>Les étoiles <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+            <p>Les étoiles <%= elem[1].sort.join(', ') %> sont sortis <%= elem[0] %> fois sur cette période</p>
           <% else %>
-            <p>L'étoile <%= elem[1] %> est sortie <%= elem[0] %> fois sur cette période</p>
+            <p>L'étoile <%= elem[1][0] %> est sortie <%= elem[0] %> fois sur cette période</p>
           <% end %>
         <% end %>
 
@@ -93,9 +94,10 @@
 
       <div class="tab-pane" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
         <h2 class="year-title"><%= year %> (<%= instance_variable_get("@tirages_#{year}").length %> tirages)</h2>
-        <% instance_variable_get("@tirages_#{year}").reverse.each do |resultat| %>
+        <% instance_variable_get("@tirages_#{year}").reverse.each_with_index do |resultat, index| %>
 
           <div class="displayed-result">
+            <div class="displayed-index"><%= index + 1 %>°)</div>
             <div class="displayed-date">
               <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
               <div class="displayed-date-month"><%= resultat[0].strftime("%B") %></div>
@@ -143,17 +145,17 @@
 
         <% (concatenated_num_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
           <% if (elem[1].length > 1) %>
-            <p>Les chiffres <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+            <p>Les chiffres <%= elem[1].sort.join(', ') %> sont sortis <%= elem[0] %> fois sur cette période</p>
           <% else %>
-            <p>Le chiffre <%= elem[1] %> est sorti <%= elem[0] %> fois sur cette période</p>
+            <p>Le chiffre <%= elem[1][0] %> est sorti <%= elem[0] %> fois sur cette période</p>
           <% end %>
         <% end %>
 
         <% (concatenated_star_freq.sort_by { |key, value| key }).reverse.each do |elem| %>
           <% if (elem[1].length > 1) %>
-            <p>Les étoiles <%= elem[1].each { |chiffre| chiffre } %> sont sortis <%= elem[0] %> fois sur cette période</p>
+            <p>Les étoiles <%= elem[1].sort.join(', ') %> sont sortis <%= elem[0] %> fois sur cette période</p>
           <% else %>
-            <p>L'étoile <%= elem[1] %> est sortie <%= elem[0] %> fois sur cette période</p>
+            <p>L'étoile <%= elem[1][0] %> est sortie <%= elem[0] %> fois sur cette période</p>
           <% end %>
         <% end %>
 

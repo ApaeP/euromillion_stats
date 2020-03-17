@@ -19,6 +19,10 @@ class PagesController < ApplicationController
 
   def frequencies
 
+  end
 
+  def populate
+    system 'rails db:seed'
+    redirect_to :root
   end
 end
