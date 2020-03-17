@@ -23,10 +23,11 @@
 
       <div class="tab-pane active" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
         <h2 class="year-title"><%= year %> (<%= instance_variable_get("@tirages_#{year}").length %> tirages)</h2>
+        <% size = instance_variable_get("@tirages_#{year}").size+1 %>
         <% instance_variable_get("@tirages_#{year}").reverse.each_with_index do |resultat, index| %>
-
+          <% size -= 1%>
           <div class="displayed-result">
-            <div class="displayed-index"><%= index + 1 %>°)</div>
+            <div class="displayed-index"><%= size %>°)</div>
             <div class="displayed-date">
               <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
               <div class="displayed-date-month"><%= resultat[0].strftime("%B") %></div>
