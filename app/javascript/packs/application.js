@@ -16,4 +16,4 @@ if (document.querySelector('#year-tabs')) {
       document.querySelector(`#tab-${btn.dataset.year}`).classList.add('active')
     })
   });
-}
+};
