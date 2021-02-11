@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_211529) do
+ActiveRecord::Schema.define(version: 2020_07_11_125502) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,9 @@ ActiveRecord::Schema.define(version: 2020_02_26_211529) do
     t.string "prize"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "won_by"
+    t.bigint "year_id", null: false
+    t.index ["year_id"], name: "index_tirages_on_year_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -41,4 +44,12 @@ ActiveRecord::Schema.define(version: 2020_02_26_211529) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "years", force: :cascade do |t|
+    t.string "year"
+    t.string "url"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "tirages", "years"
 end

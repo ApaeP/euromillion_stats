@@ -26,7 +26,11 @@
         <% size = instance_variable_get("@tirages_#{year}").size+1 %>
         <% instance_variable_get("@tirages_#{year}").reverse.each_with_index do |resultat, index| %>
           <% size -= 1%>
-          <div class="displayed-result">
+          <% if resultat[8] != nil %>
+            <div class="displayed-result" style="background-color: rgba(20, 100, 20, 0.2);">
+          <% else %>
+            <div class="displayed-result">
+          <% end %>
             <div class="displayed-index"><%= size %>°)</div>
             <div class="displayed-date">
               <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
@@ -40,7 +44,7 @@
             <div class="displayed-number"><%= resultat[5] %></div>
             <div class="displayed-star"><i class="fas fa-star"></i><%= resultat[6] %></div>
             <div class="displayed-star"><i class="fas fa-star"></i><%= resultat[7] %></div>
-            <div class="displayed-prize"><%= resultat[8] == "0 EUR" ? "Non communiqué" : resultat[8] %></div>
+            <div class="displayed-prize"><%= resultat[9] == "0 EUR" ? "Non communiqué" : resultat[9] %></div>
           </div>
 
         <% end %> <!-- itération sur variable d'instance get -->
@@ -97,7 +101,11 @@
         <h2 class="year-title"><%= year %> (<%= instance_variable_get("@tirages_#{year}").length %> tirages)</h2>
         <% instance_variable_get("@tirages_#{year}").reverse.each_with_index do |resultat, index| %>
 
-          <div class="displayed-result">
+          <% if resultat[8] != nil %>
+            <div class="displayed-result" style="background-color: rgba(20, 100, 20, 0.2);">
+          <% else %>
+            <div class="displayed-result">
+          <% end %>
             <div class="displayed-index"><%= index + 1 %>°)</div>
             <div class="displayed-date">
               <div class="displayed-date-daynb"><%= resultat[0].strftime("%d") %></div>
