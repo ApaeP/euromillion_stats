@@ -1,9 +1,14 @@
-<h1>Bienvenue sur EuroMillions Tool</h1>
-<% nb_de_gagnants = 0 %>
-<% Tirage.where(won_by: (1..100).to_a).each { |winner| nb_de_gagnants += winner.won_by } %>
-<h3><%= Tirage.count %> tirages depuis le début de l'Euromillion <br>
-    dont <%= Tirage.where(won_by: (1..100).to_a).count %> ont été gagnés <br>
-    par <%= nb_de_gagnants%> personnes</h3>
-<%= link_to 'Résultats et statistiques par années', index_per_year_path %>
-<%= link_to 'Fréquences', frequencies_path %>
-<%= link_to 'Populate DataBase', populate_path %>
+<div class="row">
+  <div class="col-12">
+
+    <h1>EuroMillions stats</h1>
+    <ul>
+      <li><strong><%= @draw_count %></strong> tirages</li>
+      <li><strong><%= @won_draw_count %></strong> gagnés (<%= @won_draw_percentage %>%)</li>
+      <li><strong><%= @winners_count %></strong> gagnants</li>
+    </ul>
+    <%= link_to 'Tous les résultats', draws_path %>
+    <%= link_to 'Fréquences', frequencies_draws_path %>
+  </div>
+</div>
+

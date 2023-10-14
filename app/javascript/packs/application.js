@@ -3,11 +3,13 @@ require("@rails/activestorage").start()
 require("channels")
 
 import "bootstrap";
+import "popper.js";
+import { FlatpickrBuilder } from '../components/flatpickr';
 
-document.addEventListener('turbolinks:load', () => {
-    // Do your stuff!
+new FlatpickrBuilder()
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
 })
-
 if (document.querySelector('#year-tabs')) {
   const nav_btns = document.querySelectorAll('.nav-item')
   nav_btns.forEach((btn) => {

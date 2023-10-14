@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-12">
+    <ul class="nav nav-tabs justify-content-center" id="year-tabs" role="tablist">
+
+      <% @years.each_with_index do |year, i| %>
+        <li class="nav-item" data-year="<%= year %>">
+          <a class="nav-link <%= 'active' if year == Time.zone.now.year %>" id="<%= year %>-tab" data-toggle="tab" href="#<%= year %>" role="tab" aria-controls="<%= year %>" aria-selected="<% i == 0 %>"><%= year %></a>
+        </li>
+      <% end %>
+
+    </ul>
+
+    <div class="tab-content">
+
+      <% @draws_by_year.each_with_index do |(year, draws), i| %>
+        <div class="tab-pane <%= "active" if year == Time.zone.now.year %>" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
+          <h2 class="year-title"><%= year %> (<%= draws.count %> tirages)</h2>
+          <%= render StatsCardComponent.new(draws, sort_by: @sort_by) %>
+
+          <% draws.each do |draw| %>
+              <div class="displayed-result" <%= 'style="background-color: rgba(20, 100, 20, 0.2);"' if draw.won? %>>
+              <div class="displayed-index"><%= 1 %>°)</div>
+              <div class="displayed-date">
+                <div class="displayed-date-daynb"><%= draw.date.strftime("%d") %></div>
+                <div class="displayed-date-month"><%= draw.date.strftime("%B") %></div>
+                <div class="displayed-date-day"><%= draw.date.strftime("(%A)") %></div>
+              </div>
+              <div class="displayed-number"><%= draw.number1 %></div>
+              <div class="displayed-number"><%= draw.number2 %></div>
+              <div class="displayed-number"><%= draw.number3 %></div>
+              <div class="displayed-number"><%= draw.number4 %></div>
+              <div class="displayed-number"><%= draw.number5 %></div>
+              <div class="displayed-star"><i class="fas fa-star"></i><%= draw.star1 %></div>
+              <div class="displayed-star"><i class="fas fa-star"></i><%= draw.star2 %></div>
+              <div class="displayed-prize"><%= draw.prize == "0 EUR" ? "Non communiqué" : draw.prize %></div>
+            </div>
+          <% end %>
+
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

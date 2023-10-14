@@ -1,3 +1,0 @@
-class TiragesController < ApplicationController
-
-end
