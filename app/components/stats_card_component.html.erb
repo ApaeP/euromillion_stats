@@ -1,0 +1,80 @@
+<div class="row mb-5">
+  <div class="col-12 my-5 position-relative">
+    <h1 class="text-center">Données sur la période</h1>
+    <%= simple_form_for :query, url: frequencies_draws_path, method: :get, html: { class: 'flatpickr-form' } do |f| %>
+      <%= f.input :start,
+                  label: "<i class=\"fa-regular fa-calendar\"></i>".html_safe,
+                  placeholder: 'Du',
+                  error: false,
+                  as: :string,
+                  wrapper_html: {
+                    class: 'form-group-date d-flex justify-content-between align-items-center bg-opacity-10 rounded-2 me-1 bg-white'
+                  },
+                  label_html: {
+                    class: 'mb-0 p-2 optional-input-label'
+                  },
+                  input_html: {
+                    class: 'form-control-date flatpickr-start-input',
+                    value: @start_date,
+                    data: {
+                      flatpickr_target: 'startDateInput'
+                    }
+                  } %>
+      <%= f.input :end,
+                  label: "<i class=\"fa-regular fa-calendar\"></i>".html_safe,
+                  placeholder: 'au',
+                  error: false,
+                  as: :string,
+                  wrapper_html: {
+                    class: 'form-group-date d-flex justify-content-between align-items-center bg-opacity-10 rounded-2 ms-1'
+                  },
+                  label_html: {
+                    class: 'mb-0 p-2 optional-input-label'
+                  },
+                  input_html: {
+                    class: 'form-control-date flatpickr-end-input',
+                    value: @end_date,
+                    data: {
+                      flatpickr_target: 'endDateInput'
+                    }
+                  } %>
+    <% end %>
+
+    <h2 class="text-center"><%= stats.starts_at %> - <%= stats.ends_at %></h2>
+    <div class="position-absolute top-0 right-0">
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%= @sort_by || "Trier par" %>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="<%= frequencies_draws_path %>">Ordre</a>
+          <a class="dropdown-item" href="<%= frequencies_draws_path(sort_by: :frequency) %>">Fréquence</a>
+          <a class="dropdown-item" href="<%= frequencies_draws_path(sort_by: :tuesdays) %>">Mardi</a>
+          <a class="dropdown-item" href="<%= frequencies_draws_path(sort_by: :fridays) %>">Vendredi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% stats.numbers.each do |number| %>
+    <div class="p-1" style="flex: 0 0 10%; max-width: 10%;">
+      <div class="p-1 position-relative">
+        <p class="w-75 mx-auto text-center d-flex justify-content-center align-items-center font-weight-bolder text-primary rounded-circle"
+            style="
+              background: <%= color_level(number.normalized_percentage) %>;
+              aspect-ratio: 1/1;
+              font-size: 2.5rem;
+            "
+        >
+          <%= number.number %>
+        </p>
+        <div class="position-absolute top-0 bg-primary d-flex justify-content-center align-items-center rounded-circle p-1 squared">
+          <span class="fs-7 text-white"><%= number.frequency %>x</span>
+        </div>
+        <p class=""><%= number.percentage %>%</p>
+        <p class=""><%= number.normalized_percentage %>%</p>
+        <p class=""><%= number.tuesdays %></p>
+        <p class=""><%= number.fridays %></p>
+      </div>
+    </div>
+  <% end %>
+</div>

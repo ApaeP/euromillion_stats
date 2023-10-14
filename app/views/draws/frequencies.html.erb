@@ -1,0 +1,137 @@
+<div class="row justify-content-center my-5">
+  <div class="col-12 mb-3">
+    <h1 class="text-center">Données sur la période</h1>
+    <p class="text-center"><%= @stats.draws_count %> tirages</p>
+  </div>
+  <%= simple_form_for :query,
+                      url: frequencies_draws_path,
+                      method: :get,
+                      html: {
+                        class: 'col-12 flatpickr-form position-relative mb-5'
+                      } do |f| %>
+    <div class="row px-3">
+      <div class="col-6">
+        <%= f.input :start,
+                    label: false,
+                    placeholder: 'Du',
+                    error: false,
+                    as: :string,
+                    wrapper_html: {
+                      class: 'form-group-date'
+                    },
+                    input_html: {
+                      class: 'date-input flatpickr-start-input',
+                      value: @start_date,
+                      data: {
+                        flatpickr_target: 'startDateInput'
+                      }
+                    } %>
+      </div>
+      <div class="col-6">
+        <%= f.input :end,
+                    label: false,
+                    placeholder: 'au',
+                    error: false,
+                    as: :string,
+                    wrapper_html: {
+                      class: 'form-group-date'
+                    },
+                    input_html: {
+                      class: 'date-input flatpickr-end-input',
+                      value: @end_date,
+                      data: {
+                        flatpickr_target: 'endDateInput'
+                      }
+                    } %>
+      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-center flex-wrap-reverse flex-row-reverse">
+      <% ((sorted = Draw.pluck(:date).sort).first.year..sorted.last.year).each do |year| %>
+        <div class="p-1"
+            style="
+            "
+        >
+          <%= link_to year, frequencies_draws_path(year: year), class: "link-year #{'active' if year == @year}" %>
+        </div>
+      <% end %>
+
+    </div>
+    <h3 class="text-center">Trier par</h3>
+    <%= f.input :sort_by,
+                as: :radio_buttons,
+                legend_tag: false,
+                checked: @sort_by,
+                collection_wrapper_tag: 'div',
+                collection_wrapper_class: 'category-wrapper',
+                item_wrapper_class: 'category-item',
+                input_html: {
+                  class: 'category-selector',
+                  onChange: 'this.form.submit()'
+                },
+                collection: [
+                  ['Numérique', 'number'],
+                  ['Nombre d\'apparitions', 'frequency'],
+                  ['Nombre d\'apparitions le mardi', 'tuesdays'],
+                  ['Nombre d\'apparitions le vendredi', 'fridays']
+                ] %>
+  <% end %>
+  <% @stats.numbers.each do |number| %>
+    <div class="p-3" style="flex: 0 0 12%; max-width: 12%;">
+      <div class="p-1 position-relative">
+        <p class="w-75 my-3 mx-auto text-center d-flex justify-content-center align-items-center font-weight-bolder text-white rounded-circle"
+            style="
+              background: <%= color_level(number.normalized_percentage) %>;
+              aspect-ratio: 1/1;
+              font-size: 2rem;
+            "
+        >
+          <%= number.number %>
+        </p>
+        <div class="position-absolute top-0 left-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
+             style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
+        >
+          <span class="fs-7 text-white cursor-help"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Le numéro <%= number.number %> est sorti <%= number.frequency %> fois sur les <%= @stats.draws_count %> tirages de la période sélectionnée."
+          >
+            <%= number.frequency %>x
+          </span>
+        </div>
+        <div class="position-absolute top-0 right-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
+             style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
+        >
+          <span class="fs-7 text-white cursor-help"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Le numéro <%= number.number %> est sorti sur <%= number.percentage %>% des tirages de la période sélectionnée."
+          >
+            <%= number.percentage.round %>%
+          </span>
+        </div>
+        <div class="position-absolute bottom-0 left-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
+             style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
+        >
+          <span class="fs-7 text-white cursor-help"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Le numéro <%= number.number %> est sorti <%= number.tuesdays %> fois le mardi sur les <%= @stats.draws_count %> tirages de la période sélectionnée."
+          >
+            T <%= number.tuesdays %>
+          </span>
+        </div>
+        <div class="position-absolute bottom-0 right-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
+             style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
+        >
+          <span class="fs-7 text-white cursor-help"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Le numéro <%= number.number %> est sorti <%= number.fridays %> fois le vendredi sur les <%= @stats.draws_count %> tirages de la période sélectionnée."
+          >
+            F <%= number.fridays %>
+          </span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

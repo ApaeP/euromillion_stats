@@ -1,7 +1,7 @@
 puts "\n\nSEEDING STARTING"
 
 puts "\nCleaning DB"
-  Tirage.destroy_all
+  Draw.destroy_all
 puts "\nDB Cleaned"
 
 # Création des instances d'objet Year de 2004 à l'année courante
@@ -22,7 +22,7 @@ tirage_count = 0
 Year.all.each do |year|
   Nokogiri::HTML(open(year.url).read).search('tr').reverse.each do |row|
     row.search('td').each_with_index do |elem, i|
-      tirage = Tirage.new
+      tirage = Draw.new
       case i
         when 0 #Date
           p elem.text.split[1]
@@ -113,7 +113,7 @@ end
 # puts "\nTirages created"
 
 # ARRAY_DE_TABLEAUX_DE_RESULTATS.each do |e|
-#   Tirage.create!(date: e[0], number1: e[1], number2: e[2], number3: e[3], number4: e[4], number5: e[5], star1: e[6], star2: e[7], won_by: e[8], prize: e[9] )
+#   Draw.create!(date: e[0], number1: e[1], number2: e[2], number3: e[3], number4: e[4], number5: e[5], star1: e[6], star2: e[7], won_by: e[8], prize: e[9] )
 # end
 
 puts "\n\nSEEDING ENDED"
