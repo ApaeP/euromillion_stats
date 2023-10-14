@@ -7,9 +7,9 @@ gem 'rubysl-open-uri'
 gem 'bootsnap', require: false
 gem 'devise'
 gem 'jbuilder', '~> 2.0'
-gem 'pg', '~> 0.21'
+gem 'pg', '~> 1.1'
 gem 'puma'
-gem 'rails', '6.0.2.1'
+gem 'rails', '6.1.7.6'
 gem 'redis'
 
 gem 'autoprefixer-rails'
