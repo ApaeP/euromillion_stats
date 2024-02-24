@@ -8,60 +8,51 @@ puts "\nDB Cleaned"
 # lien_pages = []
 # (2004..Date.today.year).to_a.each { |annee| lien_pages << "http://www.tirage-euromillions.net/euromillions/annees/annee-#{annee}/" }
 
-puts "\n Création des années"
-  (2004..Date.today.year).to_a.each { |annee| Year.create!(year: annee, url: "http://www.tirage-euromillions.net/euromillions/annees/annee-#{annee}/") }
-puts "Années crées\n "
+# puts "\n Création des années"
+  # (2004..Date.today.year).to_a.each { |annee| Year.create!(year: annee, url: "http://www.tirage-euromillions.net/euromillions/annees/annee-#{annee}/") }
+  Scrapers::DrawGenerator.call
+# puts "Années crées\n "
 
 # Instanciations des variables générales
-ARRAY_DE_TABLEAUX_DE_RESULTATS = []
-ARRAY_DE_CHIFFRES_GAGNANTS = []
-ARRAY_DES_ETOILES_GAGNANTES = []
+# ARRAY_DE_TABLEAUX_DE_RESULTATS = []
+# ARRAY_DE_CHIFFRES_GAGNANTS = []
+# ARRAY_DES_ETOILES_GAGNANTES = []
 
 
-tirage_count = 0
-Year.all.each do |year|
-  Nokogiri::HTML(open(year.url).read).search('tr').reverse.each do |row|
-    row.search('td').each_with_index do |elem, i|
-      tirage = Draw.new
-      case i
-        when 0 #Date
-          p elem.text.split[1]
-          tirage.date = Date.parse elem.text.split[1]
-        when 1
-          p elem.text.strip.to_i
-          tirage.number1 = elem.text.strip.to_i
-        when 2
-          p elem.text.strip.to_i
-          tirage.number2 = elem.text.strip.to_i
-        when 3
-          p elem.text.strip.to_i
-          tirage.number3 = elem.text.strip.to_i
-        when 4
-          p elem.text.strip.to_i
-          tirage.number4 = elem.text.strip.to_i
-        when 5
-          p elem.text.strip.to_i
-          tirage.number5 = elem.text.strip.to_i
-        when 6
-          p elem.text.strip.to_i
-          tirage.star1 = elem.text.strip.to_i
-        when 7
-          p elem.text.strip.to_i
-          tirage.star2 = elem.text.strip.to_i
-        when 8
-          p elem.text.strip.to_i
-          elem.text.strip.to_i > 0 ? (tirage.won_by = elem.text.strip.to_i) : (tirage.won_by = nil)
-        when 9
-          p elem.text
-          tirage.prize = elem.text
-      end
-      tirage.year = year
-      tirage.save!
-      puts "Tirage n°#{tirage_count} crée"
-      tirage_count += 1
-    end
-  end
-end
+# tirage_count = 0
+# Year.all.each do |year|
+#   Nokogiri::HTML(open(year.url).read).search('tr').reverse.each do |row|
+#     row.search('td').each_with_index do |elem, i|
+#       tirage = Draw.new
+#       case i
+#         when 0
+#           tirage.date = Date.parse elem.text.split[1]
+#         when 1
+#           tirage.number1 = elem.text.strip.to_i
+#         when 2
+#           tirage.number2 = elem.text.strip.to_i
+#         when 3
+#           tirage.number3 = elem.text.strip.to_i
+#         when 4
+#           tirage.number4 = elem.text.strip.to_i
+#         when 5
+#           tirage.number5 = elem.text.strip.to_i
+#         when 6
+#           tirage.star1 = elem.text.strip.to_i
+#         when 7
+#           tirage.star2 = elem.text.strip.to_i
+#         when 8
+#           elem.text.strip.to_i > 0 ? (tirage.winners = elem.text.strip.to_i) : (tirage.winners = nil)
+#         when 9
+#           tirage.prize = elem.text
+#       end
+#       tirage.year = year
+#       tirage.save!
+#       puts "Tirage n°#{tirage_count} crée"
+#       tirage_count += 1
+#     end
+#   end
+# end
 
 
 # Ici est construit :
@@ -113,7 +104,7 @@ end
 # puts "\nTirages created"
 
 # ARRAY_DE_TABLEAUX_DE_RESULTATS.each do |e|
-#   Draw.create!(date: e[0], number1: e[1], number2: e[2], number3: e[3], number4: e[4], number5: e[5], star1: e[6], star2: e[7], won_by: e[8], prize: e[9] )
+#   Draw.create!(date: e[0], number1: e[1], number2: e[2], number3: e[3], number4: e[4], number5: e[5], star1: e[6], star2: e[7], winners: e[8], prize: e[9] )
 # end
 
 puts "\n\nSEEDING ENDED"

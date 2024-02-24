@@ -13,11 +13,12 @@ gem 'rails', '6.1.7.6'
 gem 'redis'
 
 gem 'autoprefixer-rails'
-gem 'font-awesome-sass', '~> 5.6.1'
+gem "font-awesome-sass", "~> 6.4.2"
 gem 'sassc-rails'
 gem 'simple_form'
 gem 'uglifier'
 gem 'webpacker'
+gem 'view_component'
 
 group :development do
   gem 'web-console', '>= 3.3.0'

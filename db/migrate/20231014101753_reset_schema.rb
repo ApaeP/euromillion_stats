@@ -9,7 +9,7 @@ class ResetSchema < ActiveRecord::Migration[6.0]
       t.integer :number5
       t.integer :star1
       t.integer :star2
-      t.integer :won_by
+      t.integer :winners
       t.string :prize
       t.timestamps
     end
@@ -24,7 +24,7 @@ class ResetSchema < ActiveRecord::Migration[6.0]
         number5: tirage.number5,
         star1: tirage.star1,
         star2: tirage.star2,
-        won_by: tirage.won_by,
+        winners: tirage.winners,
         prize: tirage.prize
       )
     end
