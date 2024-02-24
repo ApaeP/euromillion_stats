@@ -5,6 +5,7 @@ class StatsCardComponent < ViewComponent::Base
   attr_reader :draws, :stats
 
   def initialize(draws = Draw.all, sort_by: nil)
+    raise ArgumentError, 'Draws must be an ActiveRecord::Relation' unless draws.is_a? ActiveRecord::Relation
     @draws = draws
     @sort_by = sort_by
     @stats = set_stats
