@@ -28,16 +28,7 @@ export class FlatpickrBuilder {
       dateFormat: "Y-m-d",
       title: "Select Date",
       name: "date",
-      disableMobile: true,
-      // disable: [
-      //   function (date) {
-      //     return date.getDay() === 0 ||
-      //            date.getDay() === 1 ||
-      //            date.getDay() === 3 ||
-      //            date.getDay() === 4 ||
-      //            date.getDay() === 6;
-      //   },
-      // ],
+      disableMobile: true
     };
   }
 
