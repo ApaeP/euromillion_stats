@@ -18,6 +18,20 @@
   font-size: 0.7rem;
 }
 
+.fs-xl {
+  font-size: 2rem;
+}
+
+.rounded-top-lg {
+  border-top-left-radius: $border-radius-lg;
+  border-top-right-radius: $border-radius-lg;
+}
+
+.rounded-bottom-lg {
+  border-bottom-left-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
+}
+
 .squared {
   aspect-ratio: 1 / 1;
 }
