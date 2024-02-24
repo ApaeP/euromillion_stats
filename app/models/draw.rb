@@ -1,35 +1,29 @@
 class Draw < ApplicationRecord
   class << self
     def min_date
-      Draw.order(:date).first.date
+      Draw.order(:date).first&.date || Date.new(2004, 2, 13)
     end
 
     def max_date
-      Draw.order(:date).last.date
+      Draw.order(:date).last&.date || Time.zone.today
     end
   end
-  validates :date, :number1, :number2, :number3, :number4, :number5, :star1, :star2, :won_by, :prize, presence: true
+  validates :date, :number1, :number2, :number3, :number4, :number5, :star1, :star2, :winners, :prize, presence: true
   validates :number1, :number2, :number3, :number4, :number5, :star1, :star2, numericality: { only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 50 }
-  validates :won_by, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :winners, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :date, uniqueness: true
 
-  scope :from_year, -> (year = Time.zone.now.year) { where(date: Date.new(year, 1, 1)..Date.new(year, -1, -1)).order(date: :desc) }
-  # scope :from_period,   -> (period, year: Time.now.year, month: Time.now.month, day: Time.now.day, quarter: (Time.now.month / 3.0).ceil) do
-  #   range = case period
-  #           when :year    then DateTime.new(year).all_year
-  #           when :quarter then DateTime.new(year, 3 * quarter).all_quarter
-  #           when :month   then DateTime.new(year, month).all_month
-  #           when :day     then DateTime.new(year, month, day).all_day
-  #           end
-  #   where(created_at: range).order(:created_at)
-  # end
+  scope :won, -> { where.not(winners: 0) }
+  scope :tuesday, -> { where('extract(dow from date) = ?', 2) }
+  scope :friday, -> { where('extract(dow from date) = ?', 5) }
+  scope :by_date, -> { order(date: :desc) }
 
   def year
     date.year
   end
 
   def won?
-    !won_by.nil?
+    !winners.nil?
   end
 
   def numbers
@@ -38,5 +32,11 @@ class Draw < ApplicationRecord
 
   def stars
     [star1, star2]
+  end
+
+  def prize_amount
+    prize.gsub(/[\s\u202F\u00A0]/, '')[/\A[\d]+(?=,)/].to_i
+  rescue
+    0
   end
 end
