@@ -15,7 +15,7 @@
       <% @draws_by_year.each_with_index do |(year, draws), i| %>
         <div class="tab-pane <%= "active" if year == Time.zone.now.year %>" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
           <h2 class="year-title"><%= year %> (<%= draws.count %> tirages)</h2>
-          <%= render StatsCardComponent.new(draws, sort_by: @sort_by) %>
+          <%#= render StatsCardComponent.new(draws, sort_by: @sort_by) %>
 
           <% draws.each do |draw| %>
               <div class="displayed-result" <%= 'style="background-color: rgba(20, 100, 20, 0.2);"' if draw.won? %>>
