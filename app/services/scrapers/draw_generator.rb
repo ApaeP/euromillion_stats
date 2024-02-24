@@ -5,13 +5,15 @@ module Scrapers
     class << self
       def call
         draw_count = 0
-        (2004..Date.today.year).to_a.each do |year|
+        start_year = Draw.any? ? Draw.max_date.year : Draw.min_date.year
+        (start_year..Date.today.year).to_a.each do |year|
           url = "https://www.tirage-euromillions.net/euromillions/annees/annee-#{year}/"
-          Nokogiri::HTML(open(url).read).search('tr').reverse.each do |row|
+          nokodoc = Nokogiri::HTML(open(url).read)
+          nokodoc.search('tr').reverse.each do |row|
             next if row.search('td').count < 10
 
             values = row.search('td').map { |e| e.text.strip }
-            draw = Draw.create(
+            draw_data = {
               date: Date.parse(values[0].split[1]),
               number1: values[1].to_i,
               number2: values[2].to_i,
@@ -20,9 +22,10 @@ module Scrapers
               number5: values[5].to_i,
               star1: values[6].to_i,
               star2: values[7].to_i,
-              won_by: values[8].to_i > 0 ? values[8].to_i : nil,
+              winners: values[8].to_i,
               prize: values[9]
-            )
+            }
+            Draw.create(draw_data)
           end
         end
       end
