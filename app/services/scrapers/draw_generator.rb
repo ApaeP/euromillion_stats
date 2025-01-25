@@ -10,9 +10,12 @@ module Scrapers
           url = "https://www.tirage-euromillions.net/euromillions/annees/annee-#{year}/"
           nokodoc = Nokogiri::HTML(open(url).read)
           nokodoc.search('tr').reverse.each do |row|
-            next if row.search('td').count < 10
 
             values = row.search('td').map { |e| e.text.strip }
+            next if values[1].nil?
+
+            values[1] = values[1].split
+            values.flatten!
             draw_data = {
               date: Date.parse(values[0].split[1]),
               number1: values[1].to_i,
@@ -23,9 +26,10 @@ module Scrapers
               star1: values[6].to_i,
               star2: values[7].to_i,
               winners: values[8].to_i,
-              prize: values[9]
+              prize: values[9].gsub(/\ |€|\ /, '').to_i
             }
-            Draw.create(draw_data)
+
+            Draw.create!(draw_data)
           end
         end
       end

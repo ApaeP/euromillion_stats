@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.7.4'
+ruby '3.1.6'
 
 gem 'nokogiri'
 gem 'rubysl-open-uri'
