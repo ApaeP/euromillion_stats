@@ -1,33 +1,93 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  nav:
+    home: "Home"
+    results: "Results"
+    statistics: "Statistics"
+    login: "Login"
+    logout: "Logout"
+
+  home:
+    title: "EuroStats"
+    subtitle: "Analyze EuroMillions draw statistics"
+    statistics_btn: "Statistics"
+    results_btn: "Results"
+    draws_analyzed: "Draws analyzed"
+    draws_won: "Winning draws"
+    win_rate: "Win rate"
+    total_winners: "Total winners"
+    last_draw: "Last draw"
+    winner: "Winner"
+    winners: "Winners"
+    jackpot: "Jackpot"
+    features_title: "Everything to analyze your chances"
+    feature_stats_title: "Detailed statistics"
+    feature_stats_desc: "Analyze the frequency of each number and star."
+    feature_hot_title: "Hot & cold numbers"
+    feature_hot_desc: "Identify frequent numbers and overdue ones."
+    feature_generator_title: "Smart generator"
+    feature_generator_desc: "Generate grids based on different strategies."
+    cta_title: "Ready to analyze the draws?"
+    cta_subtitle: "Discover all statistics and generate your grids."
+    explore_btn: "Explore statistics"
+
+  results:
+    title: "EuroMillions Results"
+    subtitle: "Complete draw history"
+    draws: "draws"
+    no_winner: "No winner"
+
+  frequencies:
+    title: "EuroMillions Statistics"
+    period: "Period"
+    draws: "Draws"
+    total_gains: "Total winnings"
+    winners: "Winners"
+    draws_won: "Winning draws"
+    avg_jackpot: "Average jackpot"
+    filter: "Filter"
+    start_date: "Start date"
+    end_date: "End date"
+    all: "All"
+    sort_by: "Sort by"
+    numeric: "Numeric"
+    frequency: "Frequency"
+    tuesdays: "Tuesdays"
+    fridays: "Fridays"
+    overdue: "Overdue"
+    hot_numbers: "Hot Numbers"
+    hot_subtitle: "Most frequent"
+    cold_numbers: "Cold Numbers"
+    cold_subtitle: "Least frequent"
+    stars: "Stars"
+    overdue_numbers: "Overdue Numbers"
+    overdue_subtitle: "Not drawn for a long time"
+    draws_ago: "draws"
+    pairs: "Pairs"
+    pairs_subtitle: "Frequently together"
+    trios: "Trios"
+    trios_subtitle: "Combinations of 3"
+    star_pairs: "Star Pairs"
+    decades: "Distribution by Decade"
+    jackpot_stats: "Jackpot Statistics"
+    maximum: "Maximum"
+    average: "Average"
+    minimum: "Minimum"
+    biggest_wins: "Biggest Wins"
+    generator: "Grid Generator"
+    generator_subtitle: "Based on statistics"
+    new_grids: "New grids"
+    all_stars: "All Stars"
+    all_numbers: "All Numbers"
+    apparitions: "appearances"
+
+  grid_strategies:
+    hot: "Hot Strategy"
+    hot_desc: "Most frequent numbers"
+    cold: "Cold Strategy"
+    cold_desc: "Least frequent numbers"
+    balanced: "Balanced"
+    balanced_desc: "Balanced mix"
+    random: "Random"
+    random_desc: "Random selection"
+    overdue: "Overdue"
+    overdue_desc: "Numbers absent for a long time"

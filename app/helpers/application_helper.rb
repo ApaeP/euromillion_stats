@@ -1,24 +1,41 @@
 module ApplicationHelper
-
   def color_level(percentage, color: :primary)
-    coef = percentage.fdiv(100)
+    coef = [0, [percentage.to_f / 100, 1].min].max
+
     case color
     when :primary
-      low, high = "99A3CC", "001367"
+      low = "74B9FF"
+      high = "0082B3"
     when :info
-      low, high = "FFE17F", "EEBB05"
+      low = "FFE082"
+      high = "F4B400"
+    when :hot
+      low = "FFA8A8"
+      high = "E53935"
+    when :cold
+      low = "90CAF9"
+      high = "1565C0"
     end
-    # low, high = "99A3CC", "001367"
-    # low, high = "FFEDB2", "EEBB05"
 
-    low_red, low_green, low_blue = low.scan(/.{2}/).map { |e| e.to_i(16) }
-    high_red, high_green, high_blue = high.scan(/.{2}/).map { |e| e.to_i(16) }
-    validate_double_chars = ->(str) { str.size < 2 ? "0#{str}" : str }
+    interpolate_color(low, high, coef)
+  end
 
-    r = validate_double_chars.call((low_red + ((high_red - low_red) * coef).round).to_s(16))
-    g = validate_double_chars.call((low_green + ((high_green - low_green) * coef).round).to_s(16))
-    b = validate_double_chars.call((low_blue + ((high_blue - low_blue) * coef).round).to_s(16))
+  def display_prize(prize)
+    return "Non communiqué" if prize.nil? || prize.zero?
 
-    "##{r}#{g}#{b}".upcase
+    number_to_currency(prize, unit: "€", separator: ",", delimiter: " ", format: "%n %u", precision: 0, locale: :fr)
+  end
+
+  private
+
+  def interpolate_color(low_hex, high_hex, coef)
+    low_r, low_g, low_b = low_hex.scan(/.{2}/).map { |e| e.to_i(16) }
+    high_r, high_g, high_b = high_hex.scan(/.{2}/).map { |e| e.to_i(16) }
+
+    r = (low_r + ((high_r - low_r) * coef)).round.clamp(0, 255)
+    g = (low_g + ((high_g - low_g) * coef)).round.clamp(0, 255)
+    b = (low_b + ((high_b - low_b) * coef)).round.clamp(0, 255)
+
+    "##{r.to_s(16).rjust(2, '0')}#{g.to_s(16).rjust(2, '0')}#{b.to_s(16).rjust(2, '0')}".upcase
   end
 end

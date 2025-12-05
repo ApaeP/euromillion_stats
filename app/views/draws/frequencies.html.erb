@@ -1,231 +1,265 @@
-<div class="row justify-content-center my-5">
-  <div class="col-12 mb-3">
-    <h1 class="text-center">Données sur la période</h1>
-    <p class="text-center"><%= @stats.draws_count %> tirages</p>
-    <p class="text-center" title="<%= @stats.gains %> €"><%= number_to_human @stats.gains %> € won by <%= @stats.winners %> ppl</p>
-    <p class="text-center" title="<%= @stats.tuesday_gains %> €"><%= number_to_human @stats.tuesday_gains %> € won on tuesdays by <%= @stats.tuesday_winners %> ppl</p>
-    <p class="text-center" title="<%= @stats.friday_gains %> €"><%= number_to_human @stats.friday_gains %> € won on fridays by <%= @stats.friday_winners %> ppl</p>
+
+<div class="text-center mb-4">
+  <h1 class="display-5 font-weight-bold">📊 Statistiques EuroMillions</h1>
+  <p class="text-muted">Période : <%= @stats.starts_at&.strftime('%d/%m/%Y') %> - <%= @stats.ends_at&.strftime('%d/%m/%Y') %></p>
+</div>
+
+<div class="row mb-4">
+  <div class="col-6 col-lg mb-3">
+    <%= render StatCardComponent.new(value: @stats.draws_count, label: "Tirages", icon: "fa-solid fa-dice") %>
   </div>
-  <%= simple_form_for :query,
-                      url: frequencies_draws_path,
-                      method: :get,
-                      html: {
-                        class: 'col-12 flatpickr-form position-relative mb-5'
-                      } do |f| %>
-    <div class="row px-3">
-      <div class="col-6">
-        <%= f.input :start,
-                    label: false,
-                    placeholder: 'Du',
-                    error: false,
-                    as: :string,
-                    wrapper_html: {
-                      class: 'form-group-date'
-                    },
-                    input_html: {
-                      class: 'date-input flatpickr-start-input',
-                      value: @start_date,
-                      data: {
-                        flatpickr_target: 'startDateInput'
-                      }
-                    } %>
-      </div>
-      <div class="col-6">
-        <%= f.input :end,
-                    label: false,
-                    placeholder: 'au',
-                    error: false,
-                    as: :string,
-                    wrapper_html: {
-                      class: 'form-group-date'
-                    },
-                    input_html: {
-                      class: 'date-input flatpickr-end-input',
-                      value: @end_date,
-                      data: {
-                        flatpickr_target: 'endDateInput'
-                      }
-                    } %>
-      </div>
-    </div>
-    <div class="d-flex flex-wrap justify-content-center flex-wrap-reverse flex-row-reverse">
-      <% ((sorted = Draw.pluck(:date).sort).first.year..sorted.last.year).each do |year| %>
-        <div class="p-1">
-          <%= link_to year, frequencies_draws_path(year: year), class: "link-year #{'active' if year == @year}" %>
+  <div class="col-6 col-lg mb-3">
+    <%= render StatCardComponent.new(value: "#{number_to_human(@stats.gains)} €", label: "Gains totaux", icon: "fa-solid fa-sack-dollar", variant: :success, tooltip: "#{number_with_delimiter(@stats.gains)} €") %>
+  </div>
+  <div class="col-6 col-lg mb-3">
+    <%= render StatCardComponent.new(value: @stats.winners, label: "Gagnants", icon: "fa-solid fa-trophy", variant: :gold) %>
+  </div>
+  <div class="col-6 col-lg mb-3">
+    <%= render StatCardComponent.new(value: @stats.won_draws_count, label: "Tirages gagnés", icon: "fa-solid fa-star", variant: :info) %>
+  </div>
+  <div class="col-12 col-lg mb-3">
+    <%= render StatCardComponent.new(value: "#{number_to_human(@stats.avg_jackpot)} €", label: "Jackpot moyen", icon: "fa-solid fa-coins", tooltip: "#{number_with_delimiter(@stats.avg_jackpot)} €") %>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <%= simple_form_for :query, url: frequencies_draws_path, method: :get, html: { class: 'flatpickr-form' } do |f| %>
+      <h5 class="font-weight-bold mb-3"><i class="fa-solid fa-filter mr-2"></i>Filtrer</h5>
+
+      <div class="row mb-3">
+        <div class="col-md-4 mb-2 mb-md-0">
+          <%= f.text_field :start, class: 'form-control flatpickr-start-input', value: @start_date, placeholder: 'Date début' %>
         </div>
-      <% end %>
-      <div class="p-1">
-        <%= link_to "All", frequencies_draws_path, class: "link-year #{ 'active' if params.empty? }" %>
+        <div class="col-md-4 mb-2 mb-md-0">
+          <%= f.text_field :end, class: 'form-control flatpickr-end-input', value: @end_date, placeholder: 'Date fin' %>
+        </div>
+        <div class="col-md-4">
+          <%= f.submit 'Filtrer', class: 'btn btn-primary btn-block' %>
+        </div>
       </div>
 
-    </div>
-    <h3 class="text-center">Sort by</h3>
-    <%= f.input :sort_by,
-                as: :radio_buttons,
-                legend_tag: false,
-                checked: @sort_by,
-                collection_wrapper_tag: 'div',
-                collection_wrapper_class: 'category-wrapper',
-                item_wrapper_class: 'category-item',
-                input_html: {
-                  class: 'category-selector',
-                  onChange: 'this.form.submit()'
-                },
-                collection: [
-                  ['Numeric', 'number'],
-                  ['Number of apparitions', 'frequency'],
-                  ['Number of apparitions on tuesdays', 'tuesdays'],
-                  ['Number of apparitions on fridays', 'fridays']
-                ] %>
-  <% end %>
-  <div class="col-12 d-flex flex-wrap">
-    <% @stats.stars.each do |star| %>
-      <%# <div class="d-flex p-2" style="flex: 0 0 calc(100% / 6); max-width: calc(100% / 6);"> %>
-      <div class="col-2 d-flex p-2">
-        <div class="shadow-sm rounded-lg w-100">
-          <div class="d-flex justify-content-center align-items-center rounded-top-lg font-weight-bolder fs-xl text-white p-3"
-               style="background: <%= color_level(star.normalized_percentage, color: :info) %>;">
-            <span><%= star.number %></span>
-          </div>
-          <div class="p-3">
-            <div class="d-flex justify-content-between"
-                 data-toggle="tooltip"
-                 data-placement="top"
-                 title="The star <%= star.number %> came out <%= star.frequency %> times on the <%= @stats.draws_count %> draws of the selected period.">
-              <span><i class="fa-solid fa-xmark"></i></span>
-              <span><%= star.frequency %></span>
-            </div>
-            <div class="d-flex justify-content-between"
-                 data-toggle="tooltip"
-                 data-placement="top"
-                 title="The star <%= star.number %> came out on <%= star.percentage %>% of the draws of the selected period.">
-              <span><i class="fa-solid fa-percent"></i></span>
-              <span><%= star.percentage %></span>
-            </div>
-          </div>
-        </div>
+      <div class="d-flex flex-wrap justify-content-center mb-3">
+        <%= link_to "Tout", frequencies_draws_path, class: "btn btn-sm m-1 #{params[:year].blank? && params.dig(:query, :start).blank? ? 'btn-primary' : 'btn-outline-secondary'}" %>
+        <% if Draw.any? %>
+          <% Draw.pluck(:date).map(&:year).uniq.sort.reverse.each do |year| %>
+            <%= link_to year, frequencies_draws_path(year: year), class: "btn btn-sm m-1 #{year == @year ? 'btn-primary' : 'btn-outline-secondary'}" %>
+          <% end %>
+        <% end %>
       </div>
-      <div class="p-3 d-none" style="flex: 0 0 12%; max-width: 12%;">
-        <div class="p-1 position-relative">
-         <p class="w-75 my-3 mx-auto text-center d-flex justify-content-center align-items-center font-weight-bolder text-white rounded-circle"
-              style="
-                background: <%= color_level(star.normalized_percentage) %>;
-                aspect-ratio: 1/1;
-                font-size: 2rem;
-              "
-          >
-            <%= star.number %>
-          </p>
-          <div class="position-absolute top-0 left-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(star.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The star <%= star.number %> came out <%= star.frequency %> times on the <%= @stats.draws_count %> draws of the selected period."
-            >
-              <%= star.frequency %>x
-            </span>
+
+      <div class="d-flex flex-wrap justify-content-center align-items-center">
+        <span class="text-muted small mr-2">Trier par :</span>
+        <% [['Numérique', 'number'], ['Fréquence', 'frequency'], ['Mardis', 'tuesdays'], ['Vendredis', 'fridays'], ['Retard', 'overdue']].each do |label, value| %>
+          <div class="custom-control custom-radio custom-control-inline">
+            <%= f.radio_button :sort_by, value, class: 'custom-control-input', id: "sort_#{value}", checked: @sort_by.to_s == value, onchange: 'this.form.submit()' %>
+            <label class="custom-control-label" for="sort_<%= value %>"><%= label %></label>
           </div>
-          <div class="position-absolute top-0 right-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(star.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The star <%= star.number %> came out on <%= star.percentage %>% of the draws of the selected period."
-            >
-              <%= star.percentage.round %>%
-            </span>
-          </div>
-          <div class="position-absolute bottom-0 left-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(star.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The star <%= star.number %> came out <%= star.tuesdays %> times on tuesdays on the <%= @stats.draws_count %> draws of the selected period."
-            >
-              T <%= star.tuesdays %>
-            </span>
-          </div>
-          <div class="position-absolute bottom-0 right-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(star.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The star <%= star.number %> came out <%= star.fridays %> times on fridays on the <%= @stats.draws_count %> draws of the selected period."
-            >
-              F <%= star.fridays %>
-            </span>
-          </div>
-          <div class="">
-            <%= star.last_drawn %>
-          </div>
-        </div>
-      </div>
-    <% end %>
-  </div>
-  <div class="col-12 d-flex flex-wrap">
-    <% @stats.numbers.each do |number| %>
-      <div class="p-3" style="flex: 0 0 12%; max-width: 12%;">
-        <div class="p-1 position-relative">
-          <p class="w-75 my-3 mx-auto text-center d-flex justify-content-center align-items-center font-weight-bolder text-white rounded-circle"
-              style="
-                background: <%= color_level(number.normalized_percentage) %>;
-                aspect-ratio: 1/1;
-                font-size: 2rem;
-              "
-          >
-            <%= number.number %>
-          </p>
-          <div class="position-absolute top-0 left-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The number <%= number.number %> came out <%= number.frequency %> times on the <%= @stats.draws_count %> draws of the selected period."
-            >
-              <%= number.frequency %>x
-            </span>
-          </div>
-          <div class="position-absolute top-0 right-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The number <%= number.number %> came out on <%= number.percentage %>% of the draws of the selected period."
-            >
-              <%= number.percentage.round %>%
-            </span>
-          </div>
-          <div class="position-absolute bottom-0 left-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The number <%= number.number %> came out <%= number.tuesdays %> times on tuesdays on the <%= @stats.draws_count %> draws of the selected period."
-            >
-              T <%= number.tuesdays %>
-            </span>
-          </div>
-          <div class="position-absolute bottom-0 right-0 d-flex justify-content-center align-items-center rounded-circle px-1 squared"
-              style="background: <%= color_level(number.normalized_percentage, color: :info) %>"
-          >
-            <span class="fs-7 text-white cursor-help"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="The number <%= number.number %> came out <%= number.fridays %> times on fridays on the <%= @stats.draws_count %> draws of the selected period."
-            >
-              F <%= number.fridays %>
-            </span>
-          </div>
-        </div>
+        <% end %>
       </div>
     <% end %>
   </div>
 </div>
+
+<div class="row mb-4">
+  <div class="col-md-6 mb-4 mb-md-0">
+    <%= render SectionCardComponent.new(title: "Numéros Chauds", subtitle: "Les plus fréquents", icon: "🔥", variant: :hot) do %>
+      <div class="d-flex flex-wrap justify-content-center mb-3">
+        <% @stats.hot_numbers&.each do |num| %>
+          <div class="m-1"><%= render NumberBallComponent.new(number: num.number, size: :lg, variant: :hot, show_frequency: true, frequency: num.frequency) %></div>
+        <% end %>
+      </div>
+      <hr>
+      <small class="text-muted">Étoiles</small>
+      <div class="d-flex flex-wrap justify-content-center mt-2">
+        <% @stats.hot_stars&.each do |star| %>
+          <div class="m-1"><%= render StarBallComponent.new(number: star.number, size: :md, variant: :hot, show_frequency: true, frequency: star.frequency) %></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    <%= render SectionCardComponent.new(title: "Numéros Froids", subtitle: "Les moins fréquents", icon: "❄️", variant: :cold) do %>
+      <div class="d-flex flex-wrap justify-content-center mb-3">
+        <% @stats.cold_numbers&.each do |num| %>
+          <div class="m-1"><%= render NumberBallComponent.new(number: num.number, size: :lg, variant: :cold, show_frequency: true, frequency: num.frequency) %></div>
+        <% end %>
+      </div>
+      <hr>
+      <small class="text-muted">Étoiles</small>
+      <div class="d-flex flex-wrap justify-content-center mt-2">
+        <% @stats.cold_stars&.each do |star| %>
+          <div class="m-1"><%= render StarBallComponent.new(number: star.number, size: :md, variant: :cold, show_frequency: true, frequency: star.frequency) %></div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= render SectionCardComponent.new(title: "Numéros en Retard", subtitle: "Non sortis depuis longtemps", icon: "⏰", variant: :dark) do %>
+  <div class="row">
+    <div class="col-md-8 mb-3 mb-md-0">
+      <small class="text-muted d-block mb-2">Numéros</small>
+      <div class="d-flex flex-wrap">
+        <% @stats.most_overdue_numbers&.each do |item| %>
+          <div class="text-center m-2">
+            <%= render NumberBallComponent.new(number: item.number, size: :md, tooltip: "#{item.draws_ago} tirages sans apparition") %>
+            <div class="small text-muted mt-1"><%= item.draws_ago %> tirages</div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <small class="text-muted d-block mb-2">Étoiles</small>
+      <div class="d-flex flex-wrap">
+        <% @stats.most_overdue_stars&.each do |item| %>
+          <div class="text-center m-2">
+            <%= render StarBallComponent.new(number: item.number, size: :md, tooltip: "#{item.draws_ago} tirages sans apparition") %>
+            <div class="small text-muted mt-1"><%= item.draws_ago %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="row mb-4">
+  <div class="col-md-4 mb-4 mb-md-0">
+    <%= render SectionCardComponent.new(title: "Paires", subtitle: "Numéros fréquents ensemble", icon: "👯", variant: :navy) do %>
+      <% @stats.number_pairs&.first(5)&.each_with_index do |pair, idx| %>
+        <%= render CombinationItemComponent.new(combination: pair, rank: idx + 1, type: :numbers) %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-4 mb-4 mb-md-0">
+    <%= render SectionCardComponent.new(title: "Trios", subtitle: "Combinaisons de 3", icon: "👯‍♀️", variant: :sky) do %>
+      <% @stats.number_trios&.first(5)&.each_with_index do |trio, idx| %>
+        <%= render CombinationItemComponent.new(combination: trio, rank: idx + 1, type: :numbers) %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="col-md-4">
+    <%= render SectionCardComponent.new(title: "Paires d'Étoiles", icon: "⭐", variant: :gold) do %>
+      <% @stats.star_pairs&.first(5)&.each_with_index do |pair, idx| %>
+        <%= render CombinationItemComponent.new(combination: pair, rank: idx + 1, type: :stars) %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render SectionCardComponent.new(title: "Distribution par Dizaine", icon: "📈", variant: :navy) do %>
+  <div class="row text-center">
+    <% @stats.decades_distribution&.each do |decade| %>
+      <div class="col">
+        <div class="progress-vertical mb-2">
+          <div class="progress-bar bg-info" style="height: <%= decade.percentage %>%;"></div>
+        </div>
+        <div class="font-weight-bold small"><%= decade.range %></div>
+        <div class="text-muted small"><%= decade.percentage %>%</div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="row mb-4">
+  <div class="col-md-6 mb-4 mb-md-0">
+    <%= render SectionCardComponent.new(title: "Statistiques Jackpot", icon: "💰", variant: :navy) do %>
+      <div class="row text-center mb-3">
+        <div class="col">
+          <div class="h4 font-weight-bold text-success mb-0" title="<%= number_with_delimiter(@stats.max_jackpot) %> €"><%= number_to_human(@stats.max_jackpot) %> €</div>
+          <small class="text-muted">Maximum</small>
+        </div>
+        <div class="col">
+          <div class="h4 font-weight-bold text-info mb-0" title="<%= number_with_delimiter(@stats.avg_jackpot) %> €"><%= number_to_human(@stats.avg_jackpot) %> €</div>
+          <small class="text-muted">Moyenne</small>
+        </div>
+        <div class="col">
+          <div class="h4 font-weight-bold text-warning mb-0" title="<%= number_with_delimiter(@stats.min_jackpot) %> €"><%= number_to_human(@stats.min_jackpot) %> €</div>
+          <small class="text-muted">Minimum</small>
+        </div>
+      </div>
+      <hr>
+      <div class="row text-center">
+        <div class="col">
+          <div class="font-weight-bold" title="<%= number_with_delimiter(@stats.tuesday_gains) %> €"><%= number_to_human(@stats.tuesday_gains) %> €</div>
+          <small class="text-muted">Mardis (<%= @stats.tuesday_winners %>)</small>
+        </div>
+        <div class="col">
+          <div class="font-weight-bold" title="<%= number_with_delimiter(@stats.friday_gains) %> €"><%= number_to_human(@stats.friday_gains) %> €</div>
+          <small class="text-muted">Vendredis (<%= @stats.friday_winners %>)</small>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="col-md-6">
+    <%= render SectionCardComponent.new(title: "Plus Gros Gains", icon: "🏆", variant: :gold) do %>
+      <% @stats.biggest_wins&.each do |draw| %>
+        <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded mb-2">
+          <div>
+            <div class="font-weight-bold small"><%= draw.date.strftime('%d/%m/%Y') %></div>
+            <div class="d-flex flex-wrap mt-1">
+              <% draw.numbers.each do |n| %><span class="mr-1"><%= render NumberBallComponent.new(number: n, size: :sm) %></span><% end %>
+              <% draw.stars.each do |s| %><span class="mr-1"><%= render StarBallComponent.new(number: s, size: :sm) %></span><% end %>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="font-weight-bold text-success" title="<%= number_with_delimiter(draw.prize_amount) %> €"><%= number_to_human(draw.prize_amount) %> €</div>
+            <small class="text-muted"><%= draw.winners %> gagnant(s)</small>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<%= render SectionCardComponent.new(title: "Générateur de Grilles", subtitle: "Basé sur les statistiques", icon: "🎲", variant: :navy) do %>
+  <div class="row">
+    <% @generated_grids&.each do |grid| %>
+      <div class="col-md-4 col-sm-6 mb-3">
+        <%= render GridDisplayComponent.new(grid: grid) %>
+      </div>
+    <% end %>
+  </div>
+  <div class="text-center mt-4">
+    <button type="button" class="btn btn-gold btn-lg" onclick="location.reload();">
+      <i class="fa-solid fa-rotate mr-2"></i>Nouvelles grilles
+    </button>
+  </div>
+<% end %>
+
+<%= render SectionCardComponent.new(title: "Toutes les Étoiles", icon: "⭐", variant: :gold) do %>
+  <div class="row">
+    <% @stats.stars.each do |star| %>
+      <div class="col-4 col-sm-3 col-md-2 col-lg-1 mb-2">
+        <div class="card border-0 shadow-sm text-center">
+          <div class="card-header bg-warning py-2">
+            <span class="font-weight-bold"><%= star.number %></span>
+          </div>
+          <div class="card-body p-2 small">
+            <div title="<%= star.frequency %> apparitions">×<%= star.frequency %></div>
+            <div class="text-muted" title="<%= star.draws_since_last %> tirages depuis">⏱<%= star.draws_since_last %></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<%= render SectionCardComponent.new(title: "Tous les Numéros", icon: "🔢", variant: :navy) do %>
+  <div class="row">
+    <% @stats.numbers.each do |number| %>
+      <div class="col-4 col-sm-3 col-md-2 col-lg-1 mb-2">
+        <div class="card border-0 shadow-sm text-center number-card">
+          <div class="number-card__header text-white py-2" style="background: <%= color_level(number.normalized_percentage) %>;">
+            <span class="font-weight-bold" style="font-size: 1.25rem;"><%= number.number %></span>
+          </div>
+          <div class="card-body p-1 small">
+            <div title="<%= number.frequency %> apparitions">×<%= number.frequency %></div>
+            <div class="text-muted" title="Retard">⏱<%= number.draws_since_last %></div>
+            <div class="text-muted" title="M=Mardi V=Vendredi">M<%= number.tuesdays %> V<%= number.fridays %></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

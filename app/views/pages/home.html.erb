@@ -1,14 +1,121 @@
-<div class="row">
-  <div class="col-12">
 
-    <h1>EuroMillions stats</h1>
-    <ul>
-      <li><strong><%= @draw_count %></strong> tirages</li>
-      <li><strong><%= @won_draw_count %></strong> gagnés (<%= @won_draw_percentage %>%)</li>
-      <li><strong><%= @winners_count %></strong> gagnants</li>
-    </ul>
-    <%= link_to 'Tous les résultats', draws_path %>
-    <%= link_to 'Fréquences', frequencies_draws_path %>
+<div class="bg-hero text-white text-center py-5 rounded mb-4">
+  <div class="py-4">
+    <div style="font-size: 4rem;" class="mb-2">⭐</div>
+    <h1 class="display-4 font-weight-bold mb-3">Euro<span class="text-gold">Stats</span></h1>
+    <p class="lead mb-4" style="opacity: 0.85;">Analysez les statistiques des tirages EuroMillions</p>
+    <div class="d-flex justify-content-center flex-wrap">
+      <%= link_to frequencies_draws_path, class: 'btn btn-gold btn-lg m-1' do %>
+        <i class="fa-solid fa-chart-line mr-2"></i>Statistiques
+      <% end %>
+      <%= link_to draws_path, class: 'btn btn-outline-light btn-lg m-1' do %>
+        <i class="fa-solid fa-list mr-2"></i>Résultats
+      <% end %>
+    </div>
   </div>
 </div>
 
+<div class="row mb-5">
+  <div class="col-6 col-md-3 mb-3">
+    <div class="card border-0 shadow-sm text-center h-100">
+      <div class="card-body">
+        <div class="h2 font-weight-bold text-primary mb-0"><%= @draw_count %></div>
+        <small class="text-muted">Tirages analysés</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-3">
+    <div class="card border-0 shadow-sm text-center h-100">
+      <div class="card-body">
+        <div class="h2 font-weight-bold text-success mb-0"><%= @won_draw_count %></div>
+        <small class="text-muted">Tirages gagnés</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-3">
+    <div class="card border-0 shadow-sm text-center h-100">
+      <div class="card-body">
+        <div class="h2 font-weight-bold text-info mb-0"><%= number_to_percentage(@won_draw_percentage, precision: 1) %></div>
+        <small class="text-muted">Taux de victoire</small>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-3">
+    <div class="card border-0 shadow-sm text-center h-100">
+      <div class="card-body">
+        <div class="h2 font-weight-bold text-warning mb-0"><%= @winners_count %></div>
+        <small class="text-muted">Gagnants au total</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @last_draw %>
+  <div class="card border-0 shadow mb-5">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+      <h5 class="mb-0 font-weight-bold"><i class="fa-solid fa-trophy text-warning mr-2"></i>Dernier tirage</h5>
+      <span class="badge badge-light"><%= @last_draw.date.strftime('%d/%m/%Y') %></span>
+    </div>
+    <div class="card-body text-center py-4">
+      <div class="d-flex justify-content-center flex-wrap mb-4">
+        <% @last_draw.numbers.each do |n| %>
+          <div class="m-1"><%= render NumberBallComponent.new(number: n, size: :xl) %></div>
+        <% end %>
+        <% @last_draw.stars.each do |s| %>
+          <div class="m-1"><%= render StarBallComponent.new(number: s, size: :xl) %></div>
+        <% end %>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-auto text-center px-4">
+          <div class="h4 font-weight-bold mb-0"><%= @last_draw.winners %></div>
+          <small class="text-muted">Gagnant(s)</small>
+        </div>
+        <div class="col-auto text-center px-4">
+          <div class="h4 font-weight-bold text-success mb-0" title="<%= number_with_delimiter(@last_draw.prize_amount) %> €">
+            <%= number_to_human(@last_draw.prize_amount) %> €
+          </div>
+          <small class="text-muted">Jackpot</small>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<h2 class="text-center font-weight-bold mb-4">Tout pour analyser vos chances</h2>
+<div class="row mb-5">
+  <div class="col-md-4 mb-3">
+    <div class="card border-0 shadow-sm h-100 text-center">
+      <div class="card-body">
+        <div style="font-size: 3rem;" class="mb-3">📊</div>
+        <h5 class="font-weight-bold">Statistiques détaillées</h5>
+        <p class="text-muted small mb-0">Analysez la fréquence d'apparition de chaque numéro et étoile.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card border-0 shadow-sm h-100 text-center">
+      <div class="card-body">
+        <div style="font-size: 3rem;" class="mb-3">🔥</div>
+        <h5 class="font-weight-bold">Numéros chauds & froids</h5>
+        <p class="text-muted small mb-0">Identifiez les numéros fréquents et ceux en retard.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-3">
+    <div class="card border-0 shadow-sm h-100 text-center">
+      <div class="card-body">
+        <div style="font-size: 3rem;" class="mb-3">🎲</div>
+        <h5 class="font-weight-bold">Générateur intelligent</h5>
+        <p class="text-muted small mb-0">Générez des grilles basées sur différentes stratégies.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-primary text-white text-center p-5 rounded">
+  <h3 class="font-weight-bold mb-2">Prêt à analyser les tirages ?</h3>
+  <p class="mb-4" style="opacity: 0.85;">Découvrez toutes les statistiques et générez vos grilles.</p>
+  <%= link_to frequencies_draws_path, class: 'btn btn-gold btn-lg' do %>
+    <i class="fa-solid fa-rocket mr-2"></i>Explorer les statistiques
+  <% end %>
+</div>

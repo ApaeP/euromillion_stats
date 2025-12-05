@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :draws, only: %i[index] do
     collection do
       get 'frequencies'
+      get 'generate_grid'
     end
   end
 end

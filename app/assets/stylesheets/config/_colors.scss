@@ -1,10 +1,52 @@
-// Define variables for your color scheme
+$navy: #0D1B3E;
+$navy-light: #1A2D5A;
+$navy-dark: #060E1F;
 
-// For example:
-$red: #FD1015;
-$blue: #282D87;
-$yellow: #EEBB05;
-$orange: #E67E22;
-$green: #1EDD88;
-$gray: #0E0000;
-$light-gray: #F4F4F4;
+$gold: #FFD200;
+$gold-light: #FFE14D;
+$gold-dark: #E6BD00;
+
+$sky: #00A3E0;
+$sky-light: #33B5E6;
+$sky-dark: #0082B3;
+
+$white: #FFFFFF;
+$off-white: #F8F9FC;
+
+$slate: #64748B;
+$slate-light: #94A3B8;
+$slate-dark: #475569;
+
+$bg-dark: $navy;
+$bg-light: #F1F5F9;
+$bg-card: $white;
+
+$text-primary: $navy;
+$text-secondary: $slate;
+$text-light: $white;
+$text-muted: $slate-light;
+
+$success: #10B981;
+$danger: #EF4444;
+$warning: $gold;
+$info: $sky;
+
+$gradient-primary: linear-gradient(135deg, $navy 0%, $navy-light 100%);
+$gradient-gold: linear-gradient(135deg, $gold 0%, $gold-dark 100%);
+$gradient-sky: linear-gradient(135deg, $sky-light 0%, $sky 100%);
+$gradient-hero: linear-gradient(180deg, $navy-dark 0%, $navy 50%, $navy-light 100%);
+
+$shadow-sm: 0 1px 2px rgba($navy, 0.05);
+$shadow-md: 0 4px 6px rgba($navy, 0.07), 0 2px 4px rgba($navy, 0.06);
+$shadow-lg: 0 10px 15px rgba($navy, 0.1), 0 4px 6px rgba($navy, 0.05);
+$shadow-xl: 0 20px 25px rgba($navy, 0.1), 0 10px 10px rgba($navy, 0.04);
+$shadow-glow-gold: 0 0 20px rgba($gold, 0.4);
+$shadow-glow-sky: 0 0 20px rgba($sky, 0.4);
+
+$ball-number-bg: $sky;
+$ball-number-text: $white;
+$ball-star-bg: $gold;
+$ball-star-text: $navy;
+
+$hot-color: #EF4444;
+$cold-color: #3B82F6;

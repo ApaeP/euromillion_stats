@@ -1,5 +1,5 @@
 class DrawsController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[ index frequencies ]
+  skip_before_action :authenticate_user!, only: %i[ index frequencies generate_grid ]
   START_TUESDAY_DRAWS_DATE = Date.new(2011, 4, 30)
 
   def index
@@ -19,5 +19,18 @@ class DrawsController < ApplicationController
     end
     @draws = Draw.where(date: @start_date..@end_date)
     @stats = DrawStats.call @draws, sort_by: @sort_by
+
+    @generated_grids = GridGenerator::STRATEGIES.map do |strategy|
+      GridGenerator.call(@stats, strategy: strategy)
+    end
+  end
+
+  def generate_grid
+    strategy = params[:strategy]&.to_sym || :balanced
+    draws = Draw.all
+    stats = DrawStats.call(draws)
+    grid = GridGenerator.call(stats, strategy: strategy)
+
+    render json: grid.to_h
   end
 end

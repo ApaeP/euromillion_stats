@@ -4,7 +4,6 @@ module Scrapers
   class DrawGenerator
     class << self
       def call
-        draw_count = 0
         start_year = Draw.any? ? Draw.max_date.year : Draw.min_date.year
         (start_year..Date.today.year).to_a.each do |year|
           url = "https://www.tirage-euromillions.net/euromillions/annees/annee-#{year}/"
@@ -16,6 +15,9 @@ module Scrapers
 
             values[1] = values[1].split
             values.flatten!
+            date = Date.parse(values[0].split[1])
+            next if date == Date.today && Time.current.hour < 22
+
             draw_data = {
               date: Date.parse(values[0].split[1]),
               number1: values[1].to_i,
