@@ -1,0 +1,21 @@
+<div class="card h-100 border-0 shadow-sm">
+  <div class="card-header bg-light d-flex align-items-center py-2">
+    <span class="mr-2" style="font-size: 1.5rem;"><%= strategy_info[:icon] %></span>
+    <div>
+      <div class="font-weight-bold small"><%= strategy_info[:label] %></div>
+      <div class="text-muted" style="font-size: 0.7rem;"><%= strategy_info[:description] %></div>
+    </div>
+  </div>
+  <div class="card-body text-center py-4">
+    <div class="d-flex justify-content-center flex-wrap mb-3">
+      <% grid.numbers.sort.each do |n| %>
+        <span class="m-1"><%= render NumberBallComponent.new(number: n, size: :md) %></span>
+      <% end %>
+    </div>
+    <div class="d-flex justify-content-center flex-wrap">
+      <% grid.stars.sort.each do |s| %>
+        <span class="m-1"><%= render StarBallComponent.new(number: s, size: :md) %></span>
+      <% end %>
+    </div>
+  </div>
+</div>

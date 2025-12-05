@@ -1,4 +1,5 @@
 import flatpickr from "flatpickr"
+import { French } from "flatpickr/dist/l10n/fr.js"
 
 export class FlatpickrBuilder {
   constructor() {
@@ -7,6 +8,7 @@ export class FlatpickrBuilder {
 
     this.startInput = this.form.querySelector(".flatpickr-start-input");
     this.endInput = this.form.querySelector(".flatpickr-end-input");
+    this.locale = document.documentElement.lang || 'fr';
     this.initFlatpickr();
   }
 
@@ -19,16 +21,18 @@ export class FlatpickrBuilder {
   };
 
   setOptions() {
+    const localeConfig = this.locale === 'fr' ? French : null;
+    const altFormat = this.locale === 'fr' ? "j F Y" : "F j, Y";
+
     this.options = {
       minDate: "2004-02-13",
       maxDate: new Date(),
       altInput: true,
       mode: "single",
-      altFormat: "F j, Y",
+      altFormat: altFormat,
       dateFormat: "Y-m-d",
-      title: "Select Date",
-      name: "date",
-      disableMobile: true
+      disableMobile: true,
+      locale: localeConfig,
     };
   }
 
@@ -56,14 +60,12 @@ export class FlatpickrBuilder {
   }
 
   setEndInputOptions() {
-    console.log(this.options);
     this.endInputOptions = {
       ...this.options,
       onChange: (selectedDates, _dateStr, _instance) => {
         this.startDateFlatpickr.config.maxDate = selectedDates[0]
         if (!this.startInput.value || this.startDateFlatpickr.selectedDates[0] > selectedDates[0]) {
           this.endDateFlatpickr.jumpToDate(selectedDates[0], true)
-          // this.endInput.value = null
         }
         this.form.submit()
       }

@@ -1,0 +1,7 @@
+<div class="ball <%= size %> <%= variant %>"
+     <% if tooltip %>data-toggle="tooltip" data-placement="top" title="<%= tooltip %>"<% end %>>
+  <span class="ball__number"><%= number %></span>
+  <% if show_frequency && frequency %>
+    <span class="ball__frequency"><%= frequency %>x</span>
+  <% end %>
+</div>

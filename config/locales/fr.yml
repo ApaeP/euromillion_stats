@@ -1,0 +1,144 @@
+fr:
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d %b"
+      long: "%d %B %Y"
+    day_names:
+      - Dimanche
+      - Lundi
+      - Mardi
+      - Mercredi
+      - Jeudi
+      - Vendredi
+      - Samedi
+    abbr_day_names:
+      - Dim
+      - Lun
+      - Mar
+      - Mer
+      - Jeu
+      - Ven
+      - Sam
+    month_names:
+      - ~
+      - Janvier
+      - Février
+      - Mars
+      - Avril
+      - Mai
+      - Juin
+      - Juillet
+      - Août
+      - Septembre
+      - Octobre
+      - Novembre
+      - Décembre
+    abbr_month_names:
+      - ~
+      - Jan
+      - Fév
+      - Mar
+      - Avr
+      - Mai
+      - Juin
+      - Juil
+      - Août
+      - Sep
+      - Oct
+      - Nov
+      - Déc
+
+  nav:
+    home: "Accueil"
+    results: "Résultats"
+    statistics: "Statistiques"
+    login: "Connexion"
+    logout: "Déconnexion"
+
+  home:
+    title: "EuroStats"
+    subtitle: "Analysez les statistiques des tirages EuroMillions"
+    statistics_btn: "Statistiques"
+    results_btn: "Résultats"
+    draws_analyzed: "Tirages analysés"
+    draws_won: "Tirages gagnés"
+    win_rate: "Taux de victoire"
+    total_winners: "Gagnants au total"
+    last_draw: "Dernier tirage"
+    winner: "Gagnant"
+    winners: "Gagnants"
+    jackpot: "Jackpot"
+    features_title: "Tout pour analyser vos chances"
+    feature_stats_title: "Statistiques détaillées"
+    feature_stats_desc: "Analysez la fréquence d'apparition de chaque numéro et étoile."
+    feature_hot_title: "Numéros chauds & froids"
+    feature_hot_desc: "Identifiez les numéros fréquents et ceux en retard."
+    feature_generator_title: "Générateur intelligent"
+    feature_generator_desc: "Générez des grilles basées sur différentes stratégies."
+    cta_title: "Prêt à analyser les tirages ?"
+    cta_subtitle: "Découvrez toutes les statistiques et générez vos grilles."
+    explore_btn: "Explorer les statistiques"
+
+  results:
+    title: "Résultats EuroMillions"
+    subtitle: "Historique complet des tirages"
+    draws: "tirages"
+    no_winner: "Pas de gagnant"
+
+  frequencies:
+    title: "Statistiques EuroMillions"
+    period: "Période"
+    draws: "Tirages"
+    total_gains: "Gains totaux"
+    winners: "Gagnants"
+    draws_won: "Tirages gagnés"
+    avg_jackpot: "Jackpot moyen"
+    filter: "Filtrer"
+    start_date: "Date début"
+    end_date: "Date fin"
+    all: "Tout"
+    sort_by: "Trier par"
+    numeric: "Numérique"
+    frequency: "Fréquence"
+    tuesdays: "Mardis"
+    fridays: "Vendredis"
+    overdue: "Retard"
+    hot_numbers: "Numéros Chauds"
+    hot_subtitle: "Les plus fréquents"
+    cold_numbers: "Numéros Froids"
+    cold_subtitle: "Les moins fréquents"
+    stars: "Étoiles"
+    overdue_numbers: "Numéros en Retard"
+    overdue_subtitle: "Non sortis depuis longtemps"
+    draws_ago: "tirages"
+    pairs: "Paires"
+    pairs_subtitle: "Numéros fréquents ensemble"
+    trios: "Trios"
+    trios_subtitle: "Combinaisons de 3"
+    star_pairs: "Paires d'Étoiles"
+    decades: "Distribution par Dizaine"
+    jackpot_stats: "Statistiques Jackpot"
+    maximum: "Maximum"
+    average: "Moyenne"
+    minimum: "Minimum"
+    biggest_wins: "Plus Gros Gains"
+    generator: "Générateur de Grilles"
+    generator_subtitle: "Basé sur les statistiques"
+    new_grids: "Nouvelles grilles"
+    all_stars: "Toutes les Étoiles"
+    all_numbers: "Tous les Numéros"
+    apparitions: "apparitions"
+
+  grid_strategies:
+    hot: "Stratégie Chaude"
+    hot_desc: "Numéros les plus fréquents"
+    cold: "Stratégie Froide"
+    cold_desc: "Numéros les moins fréquents"
+    balanced: "Équilibrée"
+    balanced_desc: "Mix équilibré"
+    random: "Aléatoire"
+    random_desc: "Sélection au hasard"
+    overdue: "En Retard"
+    overdue_desc: "Numéros absents depuis longtemps"
+

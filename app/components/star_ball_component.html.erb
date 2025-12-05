@@ -1,0 +1,8 @@
+<div class="star <%= size %> <%= variant %>"
+     <% if tooltip %>data-toggle="tooltip" data-placement="top" title="<%= tooltip %>"<% end %>>
+  <span class="star__icon">★</span>
+  <span class="star__number"><%= number %></span>
+  <% if show_frequency && frequency %>
+    <span class="star__frequency"><%= frequency %>x</span>
+  <% end %>
+</div>

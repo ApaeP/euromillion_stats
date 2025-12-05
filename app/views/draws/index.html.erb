@@ -1,44 +1,115 @@
-<div class="row">
-  <div class="col-12">
-    <ul class="nav nav-tabs justify-content-center" id="year-tabs" role="tablist">
 
-      <% @years.each_with_index do |year, i| %>
-        <li class="nav-item" data-year="<%= year %>">
-          <a class="nav-link <%= 'active' if year == Time.zone.now.year %>" id="<%= year %>-tab" data-toggle="tab" href="#<%= year %>" role="tab" aria-controls="<%= year %>" aria-selected="<% i == 0 %>"><%= year %></a>
-        </li>
-      <% end %>
+<div class="text-center mb-4">
+  <h1 class="display-5 font-weight-bold">🎰 Résultats EuroMillions</h1>
+  <p class="text-muted">Historique complet des tirages</p>
+</div>
 
-    </ul>
+<ul class="nav nav-pills nav-fill flex-wrap justify-content-center mb-4" id="year-tabs" role="tablist">
+  <% @years.each_with_index do |year, i| %>
+    <li class="nav-item m-1">
+      <a class="nav-link <%= 'active' if year == Time.zone.now.year %>"
+         id="<%= year %>-tab"
+         data-toggle="tab"
+         href="#tab-<%= year %>"
+         role="tab">
+        <%= year %>
+      </a>
+    </li>
+  <% end %>
+</ul>
 
-    <div class="tab-content">
+<div class="tab-content">
+  <% @draws_by_year.each do |year, draws| %>
+    <div class="tab-pane fade <%= "show active" if year == Time.zone.now.year %>"
+         id="tab-<%= year %>"
+         role="tabpanel">
 
-      <% @draws_by_year.each_with_index do |(year, draws), i| %>
-        <div class="tab-pane <%= "active" if year == Time.zone.now.year %>" id="tab-<%= year %>" role="tabpanel" aria-labelledby="<%= year %>-tab">
-          <h2 class="year-title"><%= year %> (<%= draws.count %> tirages)</h2>
-          <%#= render StatsCardComponent.new(draws, sort_by: @sort_by) %>
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 font-weight-bold text-primary mb-0">
+          <span class="text-gold mr-2">★</span>
+          <%= year %>
+        </h2>
+        <span class="badge badge-primary badge-pill px-3 py-2">
+          <%= draws.count %> tirages
+        </span>
+      </div>
 
-          <% draws.each do |draw| %>
-              <div class="displayed-result" <%= 'style="background-color: rgba(20, 100, 20, 0.2);"' if draw.won? %>>
-              <div class="displayed-index"><%= 1 %>°)</div>
-              <div class="displayed-date">
-                <div class="displayed-date-daynb"><%= draw.date.strftime("%d") %></div>
-                <div class="displayed-date-month"><%= draw.date.strftime("%B") %></div>
-                <div class="displayed-date-day"><%= draw.date.strftime("(%A)") %></div>
+      <div class="draws-list">
+        <% draws.sort_by(&:date).reverse.each_with_index do |draw, index| %>
+          <div class="card border-0 shadow-sm mb-3 <%= 'border-left border-success' if draw.won? %>" style="<%= 'border-left: 4px solid #10B981 !important;' if draw.won? %>">
+            <div class="card-body py-3">
+              <div class="row align-items-center">
+
+                <div class="col-12 col-md-2 mb-3 mb-md-0 text-center text-md-left">
+                  <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                    <div class="bg-primary text-white rounded text-center mr-3" style="width: 50px; padding: 8px 0;">
+                      <div class="font-weight-bold" style="font-size: 1.25rem; line-height: 1;"><%= draw.date.strftime("%d") %></div>
+                      <div style="font-size: 0.65rem; text-transform: uppercase;"><%= draw.date.strftime("%b") %></div>
+                    </div>
+                    <div>
+                      <div class="font-weight-bold"><%= draw.date.strftime("%A") %></div>
+                      <div class="text-muted small"><%= draw.date.strftime("%Y") %></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                  <div class="d-flex justify-content-center flex-wrap">
+                    <% draw.numbers.each do |n| %>
+                      <span class="m-1"><%= render NumberBallComponent.new(number: n, size: :md) %></span>
+                    <% end %>
+                    <span class="mx-2 d-flex align-items-center text-muted">|</span>
+                    <% draw.stars.each do |s| %>
+                      <span class="m-1"><%= render StarBallComponent.new(number: s, size: :md) %></span>
+                    <% end %>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-4 text-center text-md-right">
+                  <% if draw.won? %>
+                    <div class="d-inline-block text-left">
+                      <div class="font-weight-bold text-success" style="font-size: 1.1rem;" title="<%= number_with_delimiter(draw.prize_amount) %> €">
+                        🏆 <%= number_to_human(draw.prize_amount) %> €
+                      </div>
+                      <div class="text-muted small">
+                        <%= draw.winners %> gagnant<%= 's' if draw.winners > 1 %>
+                      </div>
+                    </div>
+                  <% else %>
+                    <div class="text-muted">
+                      <span class="badge badge-light px-3 py-2">Pas de gagnant</span>
+                      <div class="small mt-1" title="<%= number_with_delimiter(draw.prize_amount) %> €">
+                        Jackpot: <%= number_to_human(draw.prize_amount) %> €
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+
               </div>
-              <div class="displayed-number"><%= draw.number1 %></div>
-              <div class="displayed-number"><%= draw.number2 %></div>
-              <div class="displayed-number"><%= draw.number3 %></div>
-              <div class="displayed-number"><%= draw.number4 %></div>
-              <div class="displayed-number"><%= draw.number5 %></div>
-              <div class="displayed-star"><i class="fas fa-star"></i><%= draw.star1 %></div>
-              <div class="displayed-star"><i class="fas fa-star"></i><%= draw.star2 %></div>
-              <div class="displayed-prize"><%= draw.prize == "0 EUR" ? "Non communiqué" : draw.prize %></div>
             </div>
-          <% end %>
-
-        </div>
-      <% end %>
+          </div>
+        <% end %>
+      </div>
 
     </div>
-  </div>
+  <% end %>
 </div>
+
+<style>
+  .nav-pills .nav-link {
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #64748B;
+    background: #F1F5F9;
+    transition: all 0.2s;
+  }
+  .nav-pills .nav-link:hover {
+    background: #E2E8F0;
+  }
+  .nav-pills .nav-link.active {
+    background: #0D1B3E;
+    color: white;
+  }
+</style>
