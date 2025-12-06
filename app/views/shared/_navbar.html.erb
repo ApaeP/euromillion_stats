@@ -20,13 +20,15 @@
         <li class="nav-item">
           <%= link_to t('nav.statistics'), frequencies_draws_path, class: "nav-link #{'active' if current_page?(frequencies_draws_path)}" %>
         </li>
-        <li class="nav-item ms-lg-3 d-none">
-          <% if user_signed_in? %>
-            <%= button_to t('nav.logout'), destroy_user_session_path, method: :delete, class: 'btn btn-outline-light btn-sm' %>
-          <% else %>
-            <%= link_to t('nav.login'), new_user_session_path, class: 'btn btn-gold btn-sm' %>
-          <% end %>
-        </li>
+        <% if false %>
+          <li class="nav-item ms-lg-3 d-none">
+            <% if user_signed_in? %>
+              <%= button_to t('nav.logout'), destroy_user_session_path, method: :delete, class: 'btn btn-outline-light btn-sm' %>
+            <% else %>
+              <%= link_to t('nav.login'), new_user_session_path, class: 'btn btn-gold btn-sm' %>
+            <% end %>
+          </li>
+        <% end %>
       </ul>
     </div>
   </div>
