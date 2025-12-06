@@ -1,13 +1,13 @@
 <div class="card h-100 border-0 shadow-sm" <%= "data-bs-toggle=tooltip data-bs-placement=top title=#{tooltip}" if tooltip %>>
   <div class="card-body d-flex align-items-center">
     <% if icon %>
-      <div class="rounded p-3 me-3 flex-shrink-0" style="background: rgba(0,0,0,0.05);">
+      <div class="rounded p-2 me-3 flex-shrink-0" style="background: rgba(0,0,0,0.05);">
         <i class="<%= icon %> text-<%= variant == :gold ? 'warning' : (variant == :default ? 'primary' : variant) %>" style="font-size: 1.25rem;"></i>
       </div>
     <% end %>
-    <div class="min-w-0">
-      <div class="h4 fw-bold mb-0 text-nowrap text-<%= variant == :gold ? 'warning' : 'dark' %>"><%= value %></div>
-      <small class="text-muted text-nowrap"><%= label %></small>
+    <div class="min-w-0 overflow-hidden">
+      <div class="h4 fw-bold mb-0 text-truncate text-<%= variant == :gold ? 'warning' : 'dark' %>"><%= value %></div>
+      <small class="text-muted text-truncate d-block"><%= label %></small>
     </div>
   </div>
 </div>
