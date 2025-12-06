@@ -1,13 +1,7 @@
-class GridGenerator
+class GridGenerator < ApplicationService
   STRATEGIES = %i[hot cold balanced random overdue].freeze
 
   attr_reader :numbers, :stars, :strategy
-
-  class << self
-    def call(stats, strategy: :balanced)
-      new(stats, strategy: strategy).call
-    end
-  end
 
   def initialize(stats, strategy: :balanced)
     @stats = stats
