@@ -1,2 +1,2 @@
-webpack-dev-server: webpack-dev-server
-ngrok: ngrok http --domain=apaep.eu.ngrok.io 3000
+# web: bin/rails server
+css: bin/rails dartsass:watch

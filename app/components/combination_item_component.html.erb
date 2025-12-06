@@ -1,9 +1,9 @@
 <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded mb-2">
   <div class="d-flex align-items-center">
-    <% if rank %><span class="text-muted small font-weight-bold mr-2">#<%= rank %></span><% end %>
+    <% if rank %><span class="text-muted small fw-bold me-2">#<%= rank %></span><% end %>
     <div class="d-flex flex-wrap">
       <% combination.numbers.each do |n| %>
-        <span class="mr-1">
+        <span class="me-1">
           <% if numbers? %>
             <%= render NumberBallComponent.new(number: n, size: :sm) %>
           <% else %>
@@ -13,8 +13,8 @@
       <% end %>
     </div>
   </div>
-  <div class="text-right">
-    <div class="font-weight-bold small"><%= combination.count %>×</div>
+  <div class="text-end">
+    <div class="fw-bold small"><%= combination.count %>×</div>
     <div class="text-muted" style="font-size: 0.7rem;"><%= combination.percentage %>%</div>
   </div>
 </div>
