@@ -1,6 +1,5 @@
-
 <div class="text-center mb-4">
-  <h1 class="display-5 font-weight-bold">📊 Statistiques EuroMillions</h1>
+  <h1 class="display-5 fw-bold">📊 Statistiques EuroMillions</h1>
   <p class="text-muted">Période : <%= @stats.starts_at&.strftime('%d/%m/%Y') %> - <%= @stats.ends_at&.strftime('%d/%m/%Y') %></p>
 </div>
 
@@ -24,18 +23,18 @@
 
 <div class="card border-0 shadow-sm mb-4">
   <div class="card-body">
-    <%= simple_form_for :query, url: frequencies_draws_path, method: :get, html: { class: 'flatpickr-form' } do |f| %>
-      <h5 class="font-weight-bold mb-3"><i class="fa-solid fa-filter mr-2"></i>Filtrer</h5>
+    <%= simple_form_for :query, url: frequencies_draws_path, method: :get, html: { data: { controller: "flatpickr" } } do |f| %>
+      <h5 class="fw-bold mb-3"><i class="fa-solid fa-filter me-2"></i>Filtrer</h5>
 
       <div class="row mb-3">
         <div class="col-md-4 mb-2 mb-md-0">
-          <%= f.text_field :start, class: 'form-control flatpickr-start-input', value: @start_date, placeholder: 'Date début' %>
+          <%= f.text_field :start, class: 'form-control', value: @start_date, placeholder: 'Date début', data: { flatpickr_target: "start" } %>
         </div>
         <div class="col-md-4 mb-2 mb-md-0">
-          <%= f.text_field :end, class: 'form-control flatpickr-end-input', value: @end_date, placeholder: 'Date fin' %>
+          <%= f.text_field :end, class: 'form-control', value: @end_date, placeholder: 'Date fin', data: { flatpickr_target: "end" } %>
         </div>
         <div class="col-md-4">
-          <%= f.submit 'Filtrer', class: 'btn btn-primary btn-block' %>
+          <%= f.submit 'Filtrer', class: 'btn btn-primary w-100' %>
         </div>
       </div>
 
@@ -49,11 +48,11 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-center align-items-center">
-        <span class="text-muted small mr-2">Trier par :</span>
+        <span class="text-muted small me-2">Trier par :</span>
         <% [['Numérique', 'number'], ['Fréquence', 'frequency'], ['Mardis', 'tuesdays'], ['Vendredis', 'fridays'], ['Retard', 'overdue']].each do |label, value| %>
-          <div class="custom-control custom-radio custom-control-inline">
-            <%= f.radio_button :sort_by, value, class: 'custom-control-input', id: "sort_#{value}", checked: @sort_by.to_s == value, onchange: 'this.form.submit()' %>
-            <label class="custom-control-label" for="sort_<%= value %>"><%= label %></label>
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :sort_by, value, class: 'form-check-input', id: "sort_#{value}", checked: @sort_by.to_s == value, onchange: 'this.form.submit()' %>
+            <label class="form-check-label" for="sort_<%= value %>"><%= label %></label>
           </div>
         <% end %>
       </div>
@@ -154,7 +153,7 @@
         <div class="progress-vertical mb-2">
           <div class="progress-bar bg-info" style="height: <%= decade.percentage %>%;"></div>
         </div>
-        <div class="font-weight-bold small"><%= decade.range %></div>
+        <div class="fw-bold small"><%= decade.range %></div>
         <div class="text-muted small"><%= decade.percentage %>%</div>
       </div>
     <% end %>
@@ -166,26 +165,26 @@
     <%= render SectionCardComponent.new(title: "Statistiques Jackpot", icon: "💰", variant: :navy) do %>
       <div class="row text-center mb-3">
         <div class="col">
-          <div class="h4 font-weight-bold text-success mb-0" title="<%= number_with_delimiter(@stats.max_jackpot) %> €"><%= number_to_human(@stats.max_jackpot) %> €</div>
+          <div class="h4 fw-bold text-success mb-0" title="<%= number_with_delimiter(@stats.max_jackpot) %> €"><%= number_to_human(@stats.max_jackpot) %> €</div>
           <small class="text-muted">Maximum</small>
         </div>
         <div class="col">
-          <div class="h4 font-weight-bold text-info mb-0" title="<%= number_with_delimiter(@stats.avg_jackpot) %> €"><%= number_to_human(@stats.avg_jackpot) %> €</div>
+          <div class="h4 fw-bold text-info mb-0" title="<%= number_with_delimiter(@stats.avg_jackpot) %> €"><%= number_to_human(@stats.avg_jackpot) %> €</div>
           <small class="text-muted">Moyenne</small>
         </div>
         <div class="col">
-          <div class="h4 font-weight-bold text-warning mb-0" title="<%= number_with_delimiter(@stats.min_jackpot) %> €"><%= number_to_human(@stats.min_jackpot) %> €</div>
+          <div class="h4 fw-bold text-warning mb-0" title="<%= number_with_delimiter(@stats.min_jackpot) %> €"><%= number_to_human(@stats.min_jackpot) %> €</div>
           <small class="text-muted">Minimum</small>
         </div>
       </div>
       <hr>
       <div class="row text-center">
         <div class="col">
-          <div class="font-weight-bold" title="<%= number_with_delimiter(@stats.tuesday_gains) %> €"><%= number_to_human(@stats.tuesday_gains) %> €</div>
+          <div class="fw-bold" title="<%= number_with_delimiter(@stats.tuesday_gains) %> €"><%= number_to_human(@stats.tuesday_gains) %> €</div>
           <small class="text-muted">Mardis (<%= @stats.tuesday_winners %>)</small>
         </div>
         <div class="col">
-          <div class="font-weight-bold" title="<%= number_with_delimiter(@stats.friday_gains) %> €"><%= number_to_human(@stats.friday_gains) %> €</div>
+          <div class="fw-bold" title="<%= number_with_delimiter(@stats.friday_gains) %> €"><%= number_to_human(@stats.friday_gains) %> €</div>
           <small class="text-muted">Vendredis (<%= @stats.friday_winners %>)</small>
         </div>
       </div>
@@ -196,14 +195,14 @@
       <% @stats.biggest_wins&.each do |draw| %>
         <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded mb-2">
           <div>
-            <div class="font-weight-bold small"><%= draw.date.strftime('%d/%m/%Y') %></div>
+            <div class="fw-bold small"><%= draw.date.strftime('%d/%m/%Y') %></div>
             <div class="d-flex flex-wrap mt-1">
-              <% draw.numbers.each do |n| %><span class="mr-1"><%= render NumberBallComponent.new(number: n, size: :sm) %></span><% end %>
-              <% draw.stars.each do |s| %><span class="mr-1"><%= render StarBallComponent.new(number: s, size: :sm) %></span><% end %>
+              <% draw.numbers.each do |n| %><span class="me-1"><%= render NumberBallComponent.new(number: n, size: :sm) %></span><% end %>
+              <% draw.stars.each do |s| %><span class="me-1"><%= render StarBallComponent.new(number: s, size: :sm) %></span><% end %>
             </div>
           </div>
-          <div class="text-right">
-            <div class="font-weight-bold text-success" title="<%= number_with_delimiter(draw.prize_amount) %> €"><%= number_to_human(draw.prize_amount) %> €</div>
+          <div class="text-end">
+            <div class="fw-bold text-success" title="<%= number_with_delimiter(draw.prize_amount) %> €"><%= number_to_human(draw.prize_amount) %> €</div>
             <small class="text-muted"><%= draw.winners %> gagnant(s)</small>
           </div>
         </div>
@@ -222,7 +221,7 @@
   </div>
   <div class="text-center mt-4">
     <button type="button" class="btn btn-gold btn-lg" onclick="location.reload();">
-      <i class="fa-solid fa-rotate mr-2"></i>Nouvelles grilles
+      <i class="fa-solid fa-rotate me-2"></i>Nouvelles grilles
     </button>
   </div>
 <% end %>
@@ -233,7 +232,7 @@
       <div class="col-4 col-sm-3 col-md-2 col-lg-1 mb-2">
         <div class="card border-0 shadow-sm text-center">
           <div class="card-header bg-warning py-2">
-            <span class="font-weight-bold"><%= star.number %></span>
+            <span class="fw-bold"><%= star.number %></span>
           </div>
           <div class="card-body p-2 small">
             <div title="<%= star.frequency %> apparitions">×<%= star.frequency %></div>
@@ -251,7 +250,7 @@
       <div class="col-4 col-sm-3 col-md-2 col-lg-1 mb-2">
         <div class="card border-0 shadow-sm text-center number-card">
           <div class="number-card__header text-white py-2" style="background: <%= color_level(number.normalized_percentage) %>;">
-            <span class="font-weight-bold" style="font-size: 1.25rem;"><%= number.number %></span>
+            <span class="fw-bold" style="font-size: 1.25rem;"><%= number.number %></span>
           </div>
           <div class="card-body p-1 small">
             <div title="<%= number.frequency %> apparitions">×<%= number.frequency %></div>

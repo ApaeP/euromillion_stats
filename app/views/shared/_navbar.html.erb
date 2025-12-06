@@ -1,16 +1,16 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
   <div class="container">
     <%= link_to root_path, class: 'navbar-brand navbar-brand-euro d-flex align-items-center' do %>
-      <span class="text-gold mr-2" style="font-size: 1.5rem;">★</span>
+      <span class="text-gold me-2" style="font-size: 1.5rem;">★</span>
       <span>Euro<span class="gold">Stats</span></span>
     <% end %>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           <%= link_to 'Accueil', root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
         </li>
@@ -20,9 +20,9 @@
         <li class="nav-item">
           <%= link_to 'Statistiques', frequencies_draws_path, class: "nav-link #{'active' if current_page?(frequencies_draws_path)}" %>
         </li>
-        <li class="nav-item ml-lg-3">
+        <li class="nav-item ms-lg-3">
           <% if user_signed_in? %>
-            <%= link_to 'Déconnexion', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light btn-sm' %>
+            <%= button_to 'Déconnexion', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light btn-sm' %>
           <% else %>
             <%= link_to 'Connexion', new_user_session_path, class: 'btn btn-gold btn-sm' %>
           <% end %>
