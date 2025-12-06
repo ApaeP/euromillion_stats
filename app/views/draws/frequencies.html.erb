@@ -1,15 +1,56 @@
-<%= turbo_frame_tag "frequencies_content" do %>
-  <div class="text-center mb-4">
-    <h1 class="display-5 fw-bold">📊 Statistiques EuroMillions</h1>
+<div class="text-center mb-4">
+  <h1 class="display-5 fw-bold">📊 Statistiques EuroMillions</h1>
+  <%= turbo_frame_tag "period_info" do %>
     <p class="text-muted">Période : <%= @stats.starts_at&.strftime('%d/%m/%Y') %> - <%= @stats.ends_at&.strftime('%d/%m/%Y') %></p>
-  </div>
+  <% end %>
+</div>
 
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <%= simple_form_for :query, url: frequencies_draws_path, method: :get, html: { data: { controller: "flatpickr", turbo_action: "replace" } } do |f| %>
+      <h5 class="fw-bold mb-3"><i class="fa-solid fa-filter me-2"></i>Filtrer</h5>
+
+      <div class="row mb-3">
+        <div class="col-md-4 mb-2 mb-md-0">
+          <%= f.text_field :start, class: 'form-control', value: @start_date, placeholder: t('frequencies.start_date'), data: { flatpickr_target: "start" } %>
+        </div>
+        <div class="col-md-4 mb-2 mb-md-0">
+          <%= f.text_field :end, class: 'form-control', value: @end_date, placeholder: t('frequencies.end_date'), data: { flatpickr_target: "end" } %>
+        </div>
+        <div class="col-md-4">
+          <%= f.submit t('frequencies.filter'), class: 'btn btn-primary w-100' %>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap justify-content-center mb-3">
+        <%= link_to t('frequencies.all'), frequencies_draws_path(query: { sort_by: @sort_by }), class: "btn btn-sm m-1 #{@year.blank? && !@custom_dates ? 'btn-primary' : 'btn-outline-secondary'}" %>
+        <% if Draw.any? %>
+          <% Draw.pluck(:date).map(&:year).uniq.sort.reverse.each do |year| %>
+            <%= link_to year, frequencies_draws_path(year: year, query: { sort_by: @sort_by }), class: "btn btn-sm m-1 #{year == @year ? 'btn-primary' : 'btn-outline-secondary'}" %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="d-flex flex-wrap justify-content-center align-items-center">
+        <span class="text-muted small me-2"><%= t('frequencies.sort_by') %> :</span>
+        <% [[t('frequencies.numeric'), 'number'], [t('frequencies.frequency'), 'frequency'], [t('frequencies.tuesdays'), 'tuesdays'], [t('frequencies.fridays'), 'fridays'], [t('frequencies.overdue'), 'overdue']].each do |label, value| %>
+          <div class="form-check form-check-inline">
+            <%= f.radio_button :sort_by, value, class: 'form-check-input', id: "sort_#{value}", checked: @sort_by.to_s == value, onchange: 'this.form.requestSubmit()' %>
+            <label class="form-check-label" for="sort_<%= value %>"><%= label %></label>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= turbo_frame_tag "frequencies_content", data: { turbo_action: "advance" } do %>
   <div class="row mb-4">
     <div class="col-6 col-lg mb-3">
       <%= render StatCardComponent.new(value: @stats.draws_count, label: "Tirages", icon: "fa-solid fa-dice") %>
     </div>
     <div class="col-6 col-lg mb-3">
-      <%= render StatCardComponent.new(value: "#{number_to_human(@stats.gains)} €", label: "Gains totaux", icon: "fa-solid fa-sack-dollar", variant: :success, tooltip: "#{number_with_delimiter(@stats.gains)} €") %>
+      <%= render StatCardComponent.new(value: "#{number_to_human(@stats.gains, locale: :fr)} €", label: "Gains totaux", icon: "fa-solid fa-sack-dollar", variant: :success, tooltip: "#{number_with_delimiter(@stats.gains)} €") %>
     </div>
     <div class="col-6 col-lg mb-3">
       <%= render StatCardComponent.new(value: @stats.winners, label: "Gagnants", icon: "fa-solid fa-trophy", variant: :gold) %>
@@ -18,46 +59,7 @@
       <%= render StatCardComponent.new(value: @stats.won_draws_count, label: "Tirages gagnés", icon: "fa-solid fa-star", variant: :info) %>
     </div>
     <div class="col-12 col-lg mb-3">
-      <%= render StatCardComponent.new(value: "#{number_to_human(@stats.avg_jackpot)} €", label: "Jackpot moyen", icon: "fa-solid fa-coins", tooltip: "#{number_with_delimiter(@stats.avg_jackpot)} €") %>
-    </div>
-  </div>
-
-  <div class="card border-0 shadow-sm mb-4">
-    <div class="card-body">
-      <%= simple_form_for :query, url: frequencies_draws_path, method: :get, html: { data: { controller: "flatpickr", turbo_frame: "frequencies_content" } } do |f| %>
-        <h5 class="fw-bold mb-3"><i class="fa-solid fa-filter me-2"></i>Filtrer</h5>
-
-        <div class="row mb-3">
-          <div class="col-md-4 mb-2 mb-md-0">
-            <%= f.text_field :start, class: 'form-control', value: @start_date, placeholder: t('frequencies.start_date'), data: { flatpickr_target: "start" } %>
-          </div>
-          <div class="col-md-4 mb-2 mb-md-0">
-            <%= f.text_field :end, class: 'form-control', value: @end_date, placeholder: t('frequencies.end_date'), data: { flatpickr_target: "end" } %>
-          </div>
-          <div class="col-md-4">
-            <%= f.submit t('frequencies.filter'), class: 'btn btn-primary w-100' %>
-          </div>
-        </div>
-
-        <div class="d-flex flex-wrap justify-content-center mb-3">
-          <%= link_to t('frequencies.all'), frequencies_draws_path, class: "btn btn-sm m-1 #{params[:year].blank? && params.dig(:query, :start).blank? ? 'btn-primary' : 'btn-outline-secondary'}", data: { turbo_frame: "frequencies_content" } %>
-          <% if Draw.any? %>
-            <% Draw.pluck(:date).map(&:year).uniq.sort.reverse.each do |year| %>
-              <%= link_to year, frequencies_draws_path(year: year), class: "btn btn-sm m-1 #{year == @year ? 'btn-primary' : 'btn-outline-secondary'}", data: { turbo_frame: "frequencies_content" } %>
-            <% end %>
-          <% end %>
-        </div>
-
-        <div class="d-flex flex-wrap justify-content-center align-items-center">
-          <span class="text-muted small me-2"><%= t('frequencies.sort_by') %> :</span>
-          <% [[t('frequencies.numeric'), 'number'], [t('frequencies.frequency'), 'frequency'], [t('frequencies.tuesdays'), 'tuesdays'], [t('frequencies.fridays'), 'fridays'], [t('frequencies.overdue'), 'overdue']].each do |label, value| %>
-            <div class="form-check form-check-inline">
-              <%= f.radio_button :sort_by, value, class: 'form-check-input', id: "sort_#{value}", checked: @sort_by.to_s == value, onchange: 'this.form.requestSubmit()' %>
-              <label class="form-check-label" for="sort_<%= value %>"><%= label %></label>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
+      <%= render StatCardComponent.new(value: "#{number_to_human(@stats.avg_jackpot, locale: :fr)} €", label: "Jackpot moyen", icon: "fa-solid fa-coins", tooltip: "#{number_with_delimiter(@stats.avg_jackpot)} €") %>
     </div>
   </div>
 
@@ -166,26 +168,26 @@
       <%= render SectionCardComponent.new(title: t('frequencies.jackpot_stats'), icon: "💰", variant: :navy) do %>
         <div class="row text-center mb-3">
           <div class="col">
-            <div class="h4 fw-bold text-success mb-0" title="<%= number_with_delimiter(@stats.max_jackpot) %> €"><%= number_to_human(@stats.max_jackpot) %> €</div>
+            <div class="h4 fw-bold text-success mb-0" title="<%= number_with_delimiter(@stats.max_jackpot) %> €"><%= number_to_human(@stats.max_jackpot, locale: :fr) %> €</div>
             <small class="text-muted"><%= t('frequencies.maximum') %></small>
           </div>
           <div class="col">
-            <div class="h4 fw-bold text-info mb-0" title="<%= number_with_delimiter(@stats.avg_jackpot) %> €"><%= number_to_human(@stats.avg_jackpot) %> €</div>
+            <div class="h4 fw-bold text-info mb-0" title="<%= number_with_delimiter(@stats.avg_jackpot) %> €"><%= number_to_human(@stats.avg_jackpot, locale: :fr) %> €</div>
             <small class="text-muted"><%= t('frequencies.average') %></small>
           </div>
           <div class="col">
-            <div class="h4 fw-bold text-warning mb-0" title="<%= number_with_delimiter(@stats.min_jackpot) %> €"><%= number_to_human(@stats.min_jackpot) %> €</div>
+            <div class="h4 fw-bold text-warning mb-0" title="<%= number_with_delimiter(@stats.min_jackpot) %> €"><%= number_to_human(@stats.min_jackpot, locale: :fr) %> €</div>
             <small class="text-muted"><%= t('frequencies.minimum') %></small>
           </div>
         </div>
         <hr>
         <div class="row text-center">
           <div class="col">
-            <div class="fw-bold" title="<%= number_with_delimiter(@stats.tuesday_gains) %> €"><%= number_to_human(@stats.tuesday_gains) %> €</div>
+            <div class="fw-bold" title="<%= number_with_delimiter(@stats.tuesday_gains) %> €"><%= number_to_human(@stats.tuesday_gains, locale: :fr) %> €</div>
             <small class="text-muted"><%= t('frequencies.tuesdays') %> (<%= @stats.tuesday_winners %>)</small>
           </div>
           <div class="col">
-            <div class="fw-bold" title="<%= number_with_delimiter(@stats.friday_gains) %> €"><%= number_to_human(@stats.friday_gains) %> €</div>
+            <div class="fw-bold" title="<%= number_with_delimiter(@stats.friday_gains) %> €"><%= number_to_human(@stats.friday_gains, locale: :fr) %> €</div>
             <small class="text-muted"><%= t('frequencies.fridays') %> (<%= @stats.friday_winners %>)</small>
           </div>
         </div>
@@ -203,7 +205,7 @@
               </div>
             </div>
             <div class="text-end">
-              <div class="fw-bold text-success" title="<%= number_with_delimiter(draw.prize_amount) %> €"><%= number_to_human(draw.prize_amount) %> €</div>
+              <div class="fw-bold text-success" title="<%= number_with_delimiter(draw.prize_amount) %> €"><%= number_to_human(draw.prize_amount, locale: :fr) %> €</div>
               <small class="text-muted"><%= draw.winners %> <%= draw.winners > 1 ? t('home.winners') : t('home.winner') %></small>
             </div>
           </div>

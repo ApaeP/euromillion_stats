@@ -71,7 +71,7 @@
                     <% if draw.won? %>
                       <div class="d-inline-block text-start">
                         <div class="fw-bold text-success" style="font-size: 1.1rem;" title="<%= number_with_delimiter(draw.prize_amount) %> €">
-                          🏆 <%= number_to_human(draw.prize_amount) %> €
+                          🏆 <%= number_to_human(draw.prize_amount, locale: :fr) %> €
                         </div>
                         <div class="text-muted small">
                           <%= draw.winners %> <%= draw.winners > 1 ? t('home.winners') : t('home.winner') %>
@@ -81,7 +81,7 @@
                       <div class="text-muted">
                         <span class="badge bg-light text-dark px-3 py-2"><%= t('results.no_winner') %></span>
                         <div class="small mt-1" title="<%= number_with_delimiter(draw.prize_amount) %> €">
-                          <%= t('home.jackpot') %>: <%= number_to_human(draw.prize_amount) %> €
+                          <%= t('home.jackpot') %>: <%= number_to_human(draw.prize_amount, locale: :fr) %> €
                         </div>
                       </div>
                     <% end %>

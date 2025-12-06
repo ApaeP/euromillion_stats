@@ -71,7 +71,7 @@
         </div>
         <div class="col-auto text-center px-4">
           <div class="h4 fw-bold text-success mb-0" title="<%= number_with_delimiter(@last_draw.prize_amount) %> €">
-            <%= number_to_human(@last_draw.prize_amount) %> €
+            <%= number_to_human(@last_draw.prize_amount, locale: :fr) %> €
           </div>
           <small class="text-muted"><%= t('home.jackpot') %></small>
         </div>

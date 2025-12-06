@@ -1,4 +1,43 @@
 fr:
+  number:
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ""
+          thousand: "K"
+          million:
+            zero: "Million"
+            one: "Million"
+            other: "Millions"
+          billion:
+            zero: "Milliard"
+            one: "Milliard"
+            other: "Milliards"
+          trillion:
+            zero: "Trillion"
+            one: "Trillion"
+            other: "Trillions"
+          quadrillion:
+            zero: "Billiard"
+            one: "Billiard"
+            other: "Billiards"
+      format:
+        delimiter: " "
+        separator: ","
+        precision: 1
+        significant: false
+        strip_insignificant_zeros: true
+    currency:
+      format:
+        format: "%n %u"
+        unit: "€"
+        separator: ","
+        delimiter: " "
+        precision: 0
+    format:
+      separator: ","
+      delimiter: " "
   time:
     formats:
       default: "%d %B %Y %H:%M"

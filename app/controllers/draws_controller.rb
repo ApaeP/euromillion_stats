@@ -9,14 +9,21 @@ class DrawsController < ApplicationController
   end
 
   def frequencies
-    @sort_by    = params.dig(:query, :sort_by) || :number
-    @start_date = params.dig(:query, :start).present? ? Date.parse(params.dig(:query, :start)) : Draw.min_date
-    @end_date   = params.dig(:query, :end).present? ? Date.parse(params.dig(:query, :end)) : Draw.max_date
+    @sort_by = params.dig(:query, :sort_by) || :number
+    @custom_dates = params.dig(:query, :start).present? || params.dig(:query, :end).present?
+
     if params[:year].present?
       @year = params[:year].to_i
-      @start_date = Date.new(params[:year].to_i, 1, 1)
-      @end_date   = Date.new(params[:year].to_i, 12, 31)
+      @start_date = Date.new(@year, 1, 1)
+      @end_date = Date.new(@year, 12, 31)
+    elsif @custom_dates
+      @start_date = params.dig(:query, :start).present? ? Date.parse(params.dig(:query, :start)) : Draw.min_date
+      @end_date = params.dig(:query, :end).present? ? Date.parse(params.dig(:query, :end)) : Draw.max_date
+    else
+      @start_date = Draw.min_date
+      @end_date = Draw.max_date
     end
+
     @draws = Draw.where(date: @start_date..@end_date)
     @stats = DrawStats.call @draws, sort_by: @sort_by
 
