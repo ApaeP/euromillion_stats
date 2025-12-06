@@ -9,9 +9,9 @@
         <small class="text-white-50">Statistiques EuroMillions. Non affilié à la FDJ.</small>
       </div>
       <div class="col-md-6 text-center text-md-end">
-        <%= link_to 'Accueil', root_path, class: 'text-white-50 me-3' %>
-        <%= link_to 'Résultats', draws_path, class: 'text-white-50 me-3' %>
-        <%= link_to 'Statistiques', frequencies_draws_path, class: 'text-white-50' %>
+        <%= link_to t('nav.home'), root_path, class: 'text-white-50 text-decoration-none me-3' %>
+        <%= link_to t('nav.results'), draws_path, class: 'text-white-50 text-decoration-none me-3' %>
+        <%= link_to t('nav.statistics'), frequencies_draws_path, class: 'text-white-50 text-decoration-none' %>
       </div>
     </div>
   </div>

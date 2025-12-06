@@ -12,19 +12,19 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <%= link_to 'Accueil', root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+          <%= link_to t('nav.home'), root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Résultats', draws_path, class: "nav-link #{'active' if current_page?(draws_path)}" %>
+          <%= link_to t('nav.results'), draws_path, class: "nav-link #{'active' if current_page?(draws_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Statistiques', frequencies_draws_path, class: "nav-link #{'active' if current_page?(frequencies_draws_path)}" %>
+          <%= link_to t('nav.statistics'), frequencies_draws_path, class: "nav-link #{'active' if current_page?(frequencies_draws_path)}" %>
         </li>
         <li class="nav-item ms-lg-3">
           <% if user_signed_in? %>
-            <%= button_to 'Déconnexion', destroy_user_session_path, method: :delete, class: 'btn btn-outline-light btn-sm' %>
+            <%= button_to t('nav.logout'), destroy_user_session_path, method: :delete, class: 'btn btn-outline-light btn-sm' %>
           <% else %>
-            <%= link_to 'Connexion', new_user_session_path, class: 'btn btn-gold btn-sm' %>
+            <%= link_to t('nav.login'), new_user_session_path, class: 'btn btn-gold btn-sm' %>
           <% end %>
         </li>
       </ul>

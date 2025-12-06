@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '3.4.7'
 
 gem 'nokogiri'
+gem 'csv'
 
 gem 'bootsnap', require: false
 gem 'devise'
@@ -28,3 +29,5 @@ group :development, :test do
   gem 'debug'
   gem 'dotenv-rails'
 end
+
+gem "rubyzip", "~> 3.2"

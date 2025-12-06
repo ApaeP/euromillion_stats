@@ -1,4 +1,4 @@
-class DrawStats
+class DrawStats < ApplicationService
   attr_reader :draws,
               :draws_count,
               :numbers,
@@ -32,12 +32,6 @@ class DrawStats
               :won_draws_count,
               :avg_gap_numbers,
               :avg_gap_stars
-
-  class << self
-    def call(draws = Draw.all, sort_by: nil)
-      new(draws, sort_by: sort_by).call
-    end
-  end
 
   def initialize(draws, sort_by: nil)
     @draws = draws.to_a
