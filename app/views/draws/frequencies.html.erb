@@ -1,3 +1,10 @@
+<% content_for :page_title, page_title("Statistiques EuroMillions#{" - #{@year}" if @year}") %>
+<% content_for :seo_title, "Statistiques EuroMillions#{" #{@year}" if @year}" %>
+<% content_for :seo_description, "Statistiques détaillées des tirages EuroMillions#{" de #{@year}" if @year}. Numéros chauds et froids, fréquences, paires gagnantes, distribution par décennie et générateur de grilles." %>
+<% content_for :json_ld do %>
+  <script type="application/ld+json"><%= raw json_ld_lottery_stats(@stats) %></script>
+<% end %>
+
 <div class="text-center mb-4">
   <h1 class="display-5 fw-bold">📊 Statistiques EuroMillions</h1>
   <%= turbo_frame_tag "period_info" do %>

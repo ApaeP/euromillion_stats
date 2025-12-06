@@ -6,14 +6,37 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <title>EuroStats - Statistiques EuroMillions</title>
-    <meta name="description" content="Analysez les statistiques des tirages EuroMillions">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+    <title><%= content_for?(:page_title) ? yield(:page_title) : page_title %></title>
+    <%= seo_meta_tags(
+      title: content_for?(:seo_title) ? yield(:seo_title) : nil,
+      description: content_for?(:seo_description) ? yield(:seo_description) : nil
+    ) %>
 
+    <%# Favicon %>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <%# Hreflang for multi-language %>
+    <link rel="alternate" hreflang="fr" href="<%= request.original_url.gsub(/locale=\w+/, 'locale=fr') %>">
+    <link rel="alternate" hreflang="en" href="<%= request.original_url.gsub(/locale=\w+/, 'locale=en') %>">
+    <link rel="alternate" hreflang="x-default" href="<%= request.original_url %>">
+
+    <%# Stylesheets %>
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <%# Preconnect for performance %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
     <%= javascript_importmap_tags %>
+
+    <%# JSON-LD Structured Data %>
+    <script type="application/ld+json"><%= raw json_ld_website %></script>
+    <script type="application/ld+json"><%= raw json_ld_organization %></script>
+    <%= yield(:json_ld) if content_for?(:json_ld) %>
   </head>
 
   <body class="d-flex flex-column" style="min-height: 100vh;">

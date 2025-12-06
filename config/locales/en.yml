@@ -1,4 +1,12 @@
 en:
+  seo:
+    site_name: "EuroStats"
+    default_title: "EuroStats - EuroMillions Statistics"
+    default_description: "Analyze EuroMillions draw statistics: hot and cold numbers, frequencies, winning pairs, smart grid generator."
+    home_description: "EuroStats - Analyze EuroMillions draw statistics. Discover hot and cold numbers, winning pairs, and use our smart grid generator."
+    results_description: "Browse the complete EuroMillions draw history. All results, winning numbers, stars and jackpots since 2004."
+    frequencies_description: "Detailed EuroMillions draw statistics. Hot and cold numbers, frequencies, winning pairs, decade distribution and grid generator."
+
   nav:
     home: "Home"
     results: "Results"

@@ -1,4 +1,12 @@
 fr:
+  seo:
+    site_name: "EuroStats"
+    default_title: "EuroStats - Statistiques EuroMillions"
+    default_description: "Analysez les statistiques des tirages EuroMillions : numéros chauds et froids, fréquences, paires gagnantes, générateur de grilles intelligent."
+    home_description: "EuroStats - Analysez les statistiques des tirages EuroMillions. Découvrez les numéros chauds et froids, les paires gagnantes, et utilisez notre générateur de grilles intelligent."
+    results_description: "Consultez l'historique complet des tirages EuroMillions. Tous les résultats, numéros gagnants, étoiles et jackpots depuis 2004."
+    frequencies_description: "Statistiques détaillées des tirages EuroMillions. Numéros chauds et froids, fréquences, paires gagnantes, distribution par décennie et générateur de grilles."
+
   number:
     human:
       decimal_units:
